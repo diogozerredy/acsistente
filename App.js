@@ -69,8 +69,6 @@ export default function App() {
   const [mensagemVacina, setmensagemVacina] = useState([]);
   const [dataNascimento, setDataNascimento] = useState(new Date());
   const [inputData, setMostrarInput] = useState(false);
-  const [idade, setIdade] = useState(null);
-
   const MostrarInput = () => {
     setMostrarInput(true);
   };
