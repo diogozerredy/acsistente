@@ -18,8 +18,6 @@ import { useFonts } from "expo-font";
 import style from "./style/style.js";
 import Crianca from "./componentes/crianca.js";
 import Vacina from "./componentes/vacina.js";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 /* NAVEGACAO
   "home"
   "telaCadastro"
@@ -39,6 +37,7 @@ export default function App() {
   const [estado, setEstado] = useState("home");
   const [criancas, setCriancas] = useState([]);
   const [nomeCrianca, setNomeCrianca] = useState("");
+  const [dataNascimento, setDataNascimento] = useState(new Date());
 
   const [criancaSelecionada, setCriancaSelecionada] = useState(null);
 
@@ -67,14 +66,16 @@ export default function App() {
   ]);
   const [message, setMessage] = useState("");
   const [mensagemVacina, setmensagemVacina] = useState([]);
-  const [dataNascimento, setDataNascimento] = useState(new Date());
-  const [inputData, setMostrarInput] = useState(false);
+  const [modalData, setModalData] = useState(false);
+
+  const [errors, setErrors] = useState({});
+
   const MostrarInput = () => {
-    setMostrarInput(true);
+    setModalData(true);
   };
   const selecionar = (evento, dataSelecionada) => {
     const data = dataSelecionada || dataNascimento;
-    setMostrarInput(false);
+    setModalData(false);
     setDataNascimento(data);
   };
 
@@ -84,6 +85,9 @@ export default function App() {
     setMessage(`Cadastro Alterado com sucesso!`);
   };
   function telaCadastrarCrianca() {
+    if (!validarInput()) {
+      return;
+    }
     const novaCrianca = new Crianca(nomeCrianca, dataNascimento);
     let id = 1;
     if (criancas.length > 0) id = criancas.length + 1;
@@ -91,9 +95,31 @@ export default function App() {
     setCriancas([...criancas, novaCrianca]);
     setMessage(`${nomeCrianca} cadastrada com sucesso!`);
     setDataNascimento(new Date());
-    alert(dataNascimento);
-    alert(typeof dataNascimento);
+    setNomeCrianca("");
+    setEstado("telaCadastro");
   }
+  const validarInput = () => {
+    let validar = true;
+    let errors = {};
+
+    /*  validar email
+    const emailRegex = /\S+@\S+\.\S+/;
+    if (!email) {
+      errors.email = "Email é obrigatório";
+      validar = false;
+    } else if (!emailRegex.test(email)) {
+      errors.email = "Email inválido";
+      validar = false;
+    } */
+
+    if (!nomeCrianca) {
+      errors.nomeCrianca = "*nome é obrigatório";
+      validar = false;
+    }
+
+    setErrors(errors);
+    return validar;
+  };
 
   function telaAddDose() {
     const vacina = vacinas.find((v) => v.nome === VacinaAdicionada);
@@ -121,6 +147,7 @@ export default function App() {
       setData("");
     }
   }
+
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
@@ -133,7 +160,7 @@ export default function App() {
 
   if (estado === "home") {
     return (
-      <View style={style.container}>
+      <View style={style.containerHome}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -201,11 +228,29 @@ export default function App() {
         <TextInput
           placeholder="Nome da Criança"
           onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
-          style={{ borderBottomWidth: 1, marginBottom: 10 }}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
         />
+        {errors.nomeCrianca && (
+          <Text style={style.error}>{errors.nomeCrianca}</Text>
+        )}
         <View>
-          <Button onPress={MostrarInput} title="SELECIONE UMA DATA!" />
-          {inputData && (
+          <TouchableOpacity
+            style={[
+              style.botao,
+              {
+                marginBottom: 5,
+                padding: 15,
+                flexDirection: "row",
+              },
+            ]}
+            onPress={MostrarInput}
+          >
+            <Text style={[style.texto, { marginTop: 4 }]}>
+              SELECIONE A DATA DE NASCIMENTO{""}
+            </Text>
+            <Icones name="calendar-plus" size={20} color="white" />
+          </TouchableOpacity>
+          {modalData && (
             <DateTimePicker
               testID="dateTimePicker"
               value={dataNascimento}

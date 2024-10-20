@@ -3,11 +3,18 @@ import Constants from "expo-constants";
 
 export default StyleSheet.create({
   //HOME
-  container: {
+  containerHome: {
     paddingTop: Constants.statusBarHeight,
     backgroundColor: "#f5f5f5",
     flex: 1,
     gap: 30,
+  },
+  container: {
+    paddingTop: Constants.statusBarHeight,
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: "#f5f5f5",
+    flex: 1,
   },
   content: {
     maxHeight: "78%",
@@ -102,5 +109,10 @@ export default StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  //erros
+  error: {
+    marginBottom: 10,
+    color: "red",
   },
 });
