@@ -39,7 +39,7 @@ export default function App() {
   const [estado, setEstado] = useState("home");
   const [criancas, setCriancas] = useState([]);
   const [nomeCrianca, setNomeCrianca] = useState("");
-  const [dataNascimento, setDataNascimento] = useState(new Date());
+  const [dataNascimento, setDataNascimento] = useState("");
 
   const [criancaSelecionada, setCriancaSelecionada] = useState(null);
 
@@ -68,19 +68,8 @@ export default function App() {
   ]);
   const [message, setMessage] = useState("");
   const [mensagemVacina, setmensagemVacina] = useState([]);
-  const [modalData, setModalData] = useState(false);
 
   const [errors, setErrors] = useState({});
-
-  const MostrarInput = () => {
-    setModalData(true);
-  };
-  const selecionar = (evento, dataSelecionada) => {
-    const data = dataSelecionada || dataNascimento;
-    setModalData(false);
-    setDataNascimento(data);
-    setDataValidacao("");
-  };
 
   function removerPorId(id) {
     const newcriancas = criancas.filter(function (val) {
@@ -89,25 +78,47 @@ export default function App() {
     setCriancas(newcriancas);
   }
   const Editar = () => {
+    if (!validarInput()) {
+      return;
+    }
     criancaSelecionada.nomeCrianca = nomeCrianca;
     criancaSelecionada.dataNascimento = dataNascimento;
     setMessage(`Cadastro Alterado com sucesso!`);
   };
+  const telaDataNascimento = (value) => {
+    const formatoData = value
+      .replace(/\D/g, "") // Remove caracteres não numéricos
+      .replace(/(\d{2})(\d)/, "$1/$2") // Adiciona a primeira barra
+      .replace(/(\d{2})(\d)/, "$1/$2"); // Adiciona a segunda barra
+    setDataNascimento(formatoData);
+  };
+  function DNConvert(dn) {
+    let valor = dn.replace(/\//g, "-");
+    let ordenar = valor.replace(/(\d{2})-(\d{2})-(\d{4})/, "$3-$2-$1");
+    let data = new Date(ordenar);
+    if (isNaN(data.getTime())) {
+      return null;
+    }
+    let novadata = new Date(data.getTime() + 24 * 60 * 60 * 1000);
+
+    return novadata;
+  }
+
   function telaCadastrarCrianca() {
-    // if (!validarInput()) {
-    //   return;
-    // }
+    if (!validarInput()) {
+      return;
+    }
     const novaCrianca = new Crianca(nomeCrianca, dataNascimento);
     novaCrianca.id = uuid.v4();
     setCriancas([...criancas, novaCrianca]);
-    setNomeCrianca("");
     setMessage(`${nomeCrianca} cadastrada com sucesso!`);
-    setDataNascimento(new Date());
+    setNomeCrianca("");
+    setDataNascimento("");
   }
-  // tem que colocar depois na tela cadastrar crianca e colocar o setdataNascimento como null as que sao new Date()
   const validarInput = () => {
     let validar = true;
     let errors = {};
+    let dnValidar = DNConvert(dataNascimento);
 
     if (!nomeCrianca) {
       errors.nomeCrianca = "*nome é obrigatório";
@@ -116,8 +127,26 @@ export default function App() {
     if (!dataNascimento) {
       errors.dataNascimento = "*data de nascimento é obrigatório";
       validar = false;
+    } else {
+      const partes = dataNascimento.split("/");
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const ano = parseInt(partes[2], 10);
+      const objetoData = new Date(ano, mes, dia);
+      6;
+      if (
+        objetoData.getFullYear() !== ano ||
+        objetoData.getMonth() !== mes ||
+        objetoData.getDate() !== dia
+      ) {
+        errors.dataNascimento = "*Data de Nascimento é errada";
+        validar = false;
+      } else if (dnValidar && dnValidar.getTime() >= new Date().getTime()) {
+        errors.dataNascimento = "*Data de Nascimento é inválida";
+        validar = false;
+      }
     }
-
+    alert(dnValidar);
     setErrors(errors);
     return validar;
   };
@@ -260,33 +289,15 @@ export default function App() {
         {errors.nomeCrianca && (
           <Text style={style.error}>{errors.nomeCrianca}</Text>
         )}
-        <View>
-          <TouchableOpacity
-            style={[
-              style.botao,
-              {
-                marginBottom: 5,
-                padding: 15,
-                flexDirection: "row",
-              },
-            ]}
-            onPress={MostrarInput}
-          >
-            <Text style={[style.texto, { marginTop: 4 }]}>
-              SELECIONE A DATA DE NASCIMENTO{""}
-            </Text>
-            <Icones name="calendar-plus" size={20} color="white" />
-          </TouchableOpacity>
-          {modalData && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={dataNascimento || new Date()}
-              mode="date"
-              display="default"
-              onChange={selecionar}
-            />
-          )}
-        </View>
+        <TextInput
+          maxLength={10}
+          value={dataNascimento}
+          keyboardType="numeric"
+          placeholder="Data de Nascimento (DD/MM/AAAA)"
+          onChangeText={telaDataNascimento}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
+        />
+
         {errors.dataNascimento && (
           <Text style={style.error}>{errors.dataNascimento}</Text>
         )}
@@ -333,7 +344,7 @@ export default function App() {
                 >
                   <Text style={{ padding: 15, fontSize: 17 }}>
                     Nome: {item.nomeCrianca}
-                    {`\n`}Dn: {item.dataNascimento.toLocaleDateString("pt-BR")}
+                    {`\n`}Dn: {item.dataNascimento}
                   </Text>
                   <TouchableOpacity onPress={() => removerPorId(item.id)}>
                     <AntDesign name="delete" size={35} color="black" />
@@ -355,10 +366,7 @@ export default function App() {
     return (
       <View style={style.container}>
         <Text>Nome: {criancaSelecionada.nomeCrianca}</Text>
-        <Text>
-          Data de Nascimento:{" "}
-          {criancaSelecionada.dataNascimento.toLocaleDateString("pt-BR")}
-        </Text>
+        <Text>Data de Nascimento: {criancaSelecionada.dataNascimento}</Text>
         <Button
           title="Adicionar Vacina"
           onPress={() => {
@@ -368,7 +376,14 @@ export default function App() {
           }}
         />
         <Button title="Ver Vacinas" onPress={() => setEstado("verVacina")} />
-        <Button title="Editar" onPress={() => setEstado("editarCrianca")} />
+        <Button
+          title="Editar"
+          onPress={() => {
+            setEstado("editarCrianca");
+            setDataNascimento("");
+            setNomeCrianca("");
+          }}
+        />
         <Button title="Voltar ao Início" onPress={() => setEstado("home")} />
       </View>
     );
@@ -457,16 +472,24 @@ export default function App() {
       <View style={style.container}>
         <TextInput
           placeholder="Nome da Criança"
-          value={nomeCrianca}
-          onChangeText={setNomeCrianca}
-          style={{ borderBottomWidth: 1, marginBottom: 10 }}
+          onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
         />
+        {errors.nomeCrianca && (
+          <Text style={style.error}>{errors.nomeCrianca}</Text>
+        )}
         <TextInput
-          placeholder="Data de Nascimento"
+          maxLength={10}
           value={dataNascimento}
-          onChangeText={setDataNascimento}
-          style={{ borderBottomWidth: 1, marginBottom: 10 }}
+          keyboardType="numeric"
+          placeholder="Data de Nascimento DD/MM/AAAA"
+          onChangeText={telaDataNascimento}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
         />
+
+        {errors.dataNascimento && (
+          <Text style={style.error}>{errors.dataNascimento}</Text>
+        )}
         <Button title="Salvar" onPress={Editar} />
         <Button
           title="Voltar"
