@@ -93,14 +93,14 @@ export default function App() {
     if (criancas.length > 0) id = criancas.length + 1;
     novaCrianca.id = id;
     setCriancas([...criancas, novaCrianca]);
+    setNomeCrianca("");
     setMessage(`${nomeCrianca} cadastrada com sucesso!`);
     setDataNascimento(new Date());
-    setNomeCrianca("");
-    setEstado("telaCadastro");
   }
   const validarInput = () => {
     let validar = true;
     let errors = {};
+    const dataAtual = new Date();
 
     /*  validar email
     const emailRegex = /\S+@\S+\.\S+/;
@@ -114,6 +114,13 @@ export default function App() {
 
     if (!nomeCrianca) {
       errors.nomeCrianca = "*nome é obrigatório";
+      validar = false;
+    }
+    if (
+      dataNascimento.toLocaleDateString("pt-BR") ===
+      dataAtual.toLocaleDateString("pt-BR")
+    ) {
+      errors.dataNascimento = "*data de nascimento é obrigatório";
       validar = false;
     }
 
@@ -260,6 +267,9 @@ export default function App() {
             />
           )}
         </View>
+        {errors.dataNascimento && (
+          <Text style={style.error}>{errors.dataNascimento}</Text>
+        )}
         <Button title="Salvar" onPress={telaCadastrarCrianca} />
         <Button
           title="Voltar"
