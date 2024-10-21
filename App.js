@@ -11,8 +11,10 @@ import {
   Modal,
   TouchableHighlight,
 } from "react-native";
+import uuid from "react-native-uuid";
 import * as SplashScreen from "expo-splash-screen";
 import Icones from "@expo/vector-icons/FontAwesome5";
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { Lato_400Regular } from "@expo-google-fonts/lato";
 import { useFonts } from "expo-font";
 import style from "./style/style.js";
@@ -77,49 +79,41 @@ export default function App() {
     const data = dataSelecionada || dataNascimento;
     setModalData(false);
     setDataNascimento(data);
+    setDataValidacao("");
   };
 
+  function removerPorId(id) {
+    const newcriancas = criancas.filter(function (val) {
+      return val.id !== id;
+    });
+    setCriancas(newcriancas);
+  }
   const Editar = () => {
     criancaSelecionada.nomeCrianca = nomeCrianca;
     criancaSelecionada.dataNascimento = dataNascimento;
     setMessage(`Cadastro Alterado com sucesso!`);
   };
   function telaCadastrarCrianca() {
-    if (!validarInput()) {
-      return;
-    }
+    // if (!validarInput()) {
+    //   return;
+    // }
     const novaCrianca = new Crianca(nomeCrianca, dataNascimento);
-    let id = 1;
-    if (criancas.length > 0) id = criancas.length + 1;
-    novaCrianca.id = id;
+    novaCrianca.id = uuid.v4();
     setCriancas([...criancas, novaCrianca]);
     setNomeCrianca("");
     setMessage(`${nomeCrianca} cadastrada com sucesso!`);
     setDataNascimento(new Date());
   }
+  // tem que colocar depois na tela cadastrar crianca e colocar o setdataNascimento como null as que sao new Date()
   const validarInput = () => {
     let validar = true;
     let errors = {};
-    const dataAtual = new Date();
-
-    /*  validar email
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!email) {
-      errors.email = "Email é obrigatório";
-      validar = false;
-    } else if (!emailRegex.test(email)) {
-      errors.email = "Email inválido";
-      validar = false;
-    } */
 
     if (!nomeCrianca) {
       errors.nomeCrianca = "*nome é obrigatório";
       validar = false;
     }
-    if (
-      dataNascimento.toLocaleDateString("pt-BR") ===
-      dataAtual.toLocaleDateString("pt-BR")
-    ) {
+    if (!dataNascimento) {
       errors.dataNascimento = "*data de nascimento é obrigatório";
       validar = false;
     }
@@ -128,7 +122,33 @@ export default function App() {
     return validar;
   };
 
+  const validarInputvacina = () => {
+    let validar = true;
+    let errors = {};
+    if (!data) {
+      errors.data = "*campo Obrigatorio";
+      validar = false;
+    }
+    if (!local) {
+      errors.local = "*campo Obrigatorio";
+      validar = false;
+    }
+    if (!lote) {
+      errors.lote = "*campo Obrigatorio";
+      validar = false;
+    }
+    if (!tecnico) {
+      errors.tecnico = "*campo Obrigatorio";
+      validar = false;
+    }
+    setErrors(errors);
+    return validar;
+  };
+
   function telaAddDose() {
+    if (!validarInputvacina()) {
+      return;
+    }
     const vacina = vacinas.find((v) => v.nome === VacinaAdicionada);
     if (vacina) {
       vacina.adicionarDose({ local, lote, tecnico, data });
@@ -167,7 +187,7 @@ export default function App() {
 
   if (estado === "home") {
     return (
-      <View style={style.containerHome}>
+      <View style={[style.Home, style.container]}>
         <Modal
           animationType="slide"
           transparent={true}
@@ -189,7 +209,7 @@ export default function App() {
           </View>
         </Modal>
         <Text style={[style.acsistente, style.texto]}>ACSISTENTE</Text>
-        <View style={style.content}>
+        <View style={[style.content, style.contenthome]}>
           <TouchableOpacity
             style={[style.botao, style.cadastros]}
             onPress={() => setEstado("cadastrados")}
@@ -222,7 +242,7 @@ export default function App() {
         </Text>
 
         <TouchableOpacity
-          style={[style.botao, style.cadastrar]}
+          style={[style.botao, style.btncadastrar]}
           onPress={() => setEstado("telaCadastro")}
         >
           <Text style={style.texto}>CADASTRAR CRIANÇA</Text>
@@ -260,7 +280,7 @@ export default function App() {
           {modalData && (
             <DateTimePicker
               testID="dateTimePicker"
-              value={dataNascimento}
+              value={dataNascimento || new Date()}
               mode="date"
               display="default"
               onChange={selecionar}
@@ -283,36 +303,53 @@ export default function App() {
     );
   } else if (estado === "cadastrados") {
     return (
-      <ScrollView style={style.container}>
+      <View style={style.container}>
         <Text style={[style.acsistente, style.texto]}>ACSISTENTE</Text>
-        {criancas.map((item) => {
-          return (
-            <TouchableOpacity
-              key={item.id}
-              style={{
-                justifyContent: "center",
-                alignContent: "center",
-                backgroundColor: `#ffffff`,
-                width: "95%",
-                marginTop: 15,
-                marginHorizontal: "2%",
-                borderRadius: 5,
-              }}
-              onPress={() => {
-                setCriancaSelecionada(item);
-                setEstado("crianca");
-              }}
-            >
-              <Text style={{ margin: 15, fontSize: 16 }}>
-                Nome: {item.nomeCrianca}
-                {`\n`}Dn: {item.dataNascimento.toLocaleDateString("pt-BR")}
-                {`\n`}ID: {item.id}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-        <Button title="Voltar" onPress={() => setEstado("home")} />
-      </ScrollView>
+        <ScrollView style={style.content}>
+          {criancas.map((item) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={{
+                  justifyContent: "center",
+                  alignContent: "center",
+                  backgroundColor: `#ffffff`,
+                  width: "95%",
+                  marginTop: 15,
+                  marginHorizontal: "2%",
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  setCriancaSelecionada(item);
+                  setEstado("crianca");
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ padding: 15, fontSize: 17 }}>
+                    Nome: {item.nomeCrianca}
+                    {`\n`}Dn: {item.dataNascimento.toLocaleDateString("pt-BR")}
+                  </Text>
+                  <TouchableOpacity onPress={() => removerPorId(item.id)}>
+                    <AntDesign name="delete" size={35} color="black" />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+        <TouchableOpacity
+          style={[style.botao, style.btncadastrar]}
+          onPress={() => setEstado("home")}
+        >
+          <Text style={style.texto}>VOLTAR</Text>
+        </TouchableOpacity>
+      </View>
     );
   } else if (estado === "crianca") {
     return (
@@ -322,7 +359,6 @@ export default function App() {
           Data de Nascimento:{" "}
           {criancaSelecionada.dataNascimento.toLocaleDateString("pt-BR")}
         </Text>
-        <Text>id: {criancaSelecionada.id}</Text>
         <Button
           title="Adicionar Vacina"
           onPress={() => {
@@ -349,29 +385,34 @@ export default function App() {
           ))}
         </Picker>
         <TextInput
+          dataDetectorTypes={"calendarEvent"}
           placeholder="Data"
           value={data}
           onChangeText={setData}
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
         />
+        {errors.data && <Text style={style.error}>{errors.data}</Text>}
         <TextInput
           placeholder="Local"
           value={local}
           onChangeText={setLocal}
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
         />
+        {errors.local && <Text style={style.error}>{errors.local}</Text>}
         <TextInput
           placeholder="Lote"
           value={lote}
           onChangeText={setLote}
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
         />
+        {errors.lote && <Text style={style.error}>{errors.lote}</Text>}
         <TextInput
           placeholder="Técnico"
           value={tecnico}
           onChangeText={setTecnico}
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
         />
+        {errors.tecnico && <Text style={style.error}>{errors.tecnico}</Text>}
         <Button title="Adicionar Dose" onPress={telaAddDose} />
         <Button title="Voltar" onPress={() => setEstado("crianca")} />
         <Button title="Voltar ao Início" onPress={() => setEstado("home")} />

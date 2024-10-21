@@ -3,31 +3,28 @@ import Constants from "expo-constants";
 
 export default StyleSheet.create({
   //HOME
-  containerHome: {
-    paddingTop: Constants.statusBarHeight,
-    backgroundColor: "#f5f5f5",
-    flex: 1,
+  Home: {
     gap: 30,
+    alignItems: "center",
   },
   container: {
     paddingTop: Constants.statusBarHeight,
-    paddingLeft: 20,
-    paddingRight: 20,
     backgroundColor: "#f5f5f5",
     flex: 1,
   },
   content: {
     maxHeight: "78%",
     backgroundColor: "#f5f5f5",
-    display: "flex",
-    flexDirection: "row",
     gap: 20,
-    justifyContent: "center",
+  },
+  contenthome: {
+    flexDirection: "row",
   },
   texto: {
     color: "#FFFFFF",
     textAlign: "center",
     fontFamily: "Lato_400Regular",
+    fontSize: 17,
   },
   acsistente: {
     marginTop: 10,
@@ -50,7 +47,7 @@ export default StyleSheet.create({
     elevation: 8,
     backgroundColor: "#26A20A",
   },
-  cadastrar: {
+  btncadastrar: {
     position: "absolute",
     right: 21,
     bottom: 15,
