@@ -1,4 +1,3 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
 import React, { useState, useEffect } from "react";
 import {
@@ -87,9 +86,9 @@ export default function App() {
   };
   const telaDataNascimento = (value) => {
     const formatoData = value
-      .replace(/\D/g, "") // Remove caracteres não numéricos
-      .replace(/(\d{2})(\d)/, "$1/$2") // Adiciona a primeira barra
-      .replace(/(\d{2})(\d)/, "$1/$2"); // Adiciona a segunda barra
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "$1/$2")
+      .replace(/(\d{2})(\d)/, "$1/$2");
     setDataNascimento(formatoData);
   };
   function DNConvert(dn) {
@@ -133,7 +132,6 @@ export default function App() {
       const mes = parseInt(partes[1], 10) - 1;
       const ano = parseInt(partes[2], 10);
       const objetoData = new Date(ano, mes, dia);
-      6;
       if (
         objetoData.getFullYear() !== ano ||
         objetoData.getMonth() !== mes ||
@@ -146,7 +144,6 @@ export default function App() {
         validar = false;
       }
     }
-    alert(dnValidar);
     setErrors(errors);
     return validar;
   };
@@ -307,6 +304,8 @@ export default function App() {
           onPress={() => {
             setEstado("home");
             setMessage("");
+            setErrors(() => (errors.nomeCrianca = false));
+            setErrors(() => (errors.dataNascimento = false));
           }}
         />
         <Text>{message}</Text>
@@ -494,7 +493,7 @@ export default function App() {
         <Button
           title="Voltar"
           onPress={() => {
-            setEstado("home");
+            setEstado("crianca");
             setMessage("");
           }}
         />
