@@ -13,12 +13,14 @@ import {
 import uuid from "react-native-uuid";
 import * as SplashScreen from "expo-splash-screen";
 import Icones from "@expo/vector-icons/FontAwesome5";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Lato_400Regular } from "@expo-google-fonts/lato";
 import { useFonts } from "expo-font";
 import style from "./style/style.js";
-import Crianca from "./src/componentes/crianca.js";
-import Vacina from "./src/componentes/vacina.js";
+import Crianca from "./src/objetos/crianca.js";
+import Vacina from "./src/objetos/vacina.js";
+import { set } from "date-fns";
 /* NAVEGACAO
   "home"
   "telaCadastro"
@@ -33,7 +35,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
   const [loaded, error] = useFonts({ Lato_400Regular });
 
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
 
   const [estado, setEstado] = useState("home");
   const [criancas, setCriancas] = useState([]);
@@ -137,10 +139,11 @@ export default function App() {
         objetoData.getMonth() !== mes ||
         objetoData.getDate() !== dia
       ) {
-        errors.dataNascimento = "*Data de Nascimento é errada";
+        errors.dataNascimento =
+          "*Verifique se voce digitou a data corretamente";
         validar = false;
       } else if (dnValidar && dnValidar.getTime() >= new Date().getTime()) {
-        errors.dataNascimento = "*Data de Nascimento é inválida";
+        errors.dataNascimento = "*Voce digitou uma data futura";
         validar = false;
       }
     }
@@ -215,26 +218,56 @@ export default function App() {
     return (
       <View style={[style.Home, style.container]}>
         <Modal
-          animationType="slide"
+          animationType="none"
           transparent={true}
           visible={modal}
           onRequestClose={() => {
             setModal(!modal);
           }}
         >
-          <View style={style.centeredView}>
-            <View style={style.modalView}>
-              <Text style={style.modalText}>Hello World!</Text>
-              <TouchableHighlight
-                style={[style.button, style.buttonClose]}
+          <View style={style.modalView}>
+            <View
+              style={{
+                width: "100%",
+                backgroundColor: "blue",
+                flexDirection: "row",
+                alignItems: "center",
+                padding: 15,
+                justifyContent: "space-between",
+              }}
+            >
+              <Text>HOME</Text>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "white",
+                  width: 50,
+                  height: 50,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
                 onPress={() => setModal(!modal)}
               >
-                <Text style={style.textStyle}>OK</Text>
-              </TouchableHighlight>
+                <AntDesign name="close" size={24} color="black" />
+              </TouchableOpacity>
             </View>
+            <Text style={style.modalText}>Hello World!</Text>
+            <TouchableHighlight
+              style={[style.button, style.buttonClose]}
+              onPress={() => {
+                setEstado("telaCadastro");
+                setModal(!modal);
+              }}
+            >
+              <Text style={style.textStyle}>OK</Text>
+            </TouchableHighlight>
           </View>
         </Modal>
-        <Text style={[style.acsistente, style.texto]}>ACSISTENTE</Text>
+        <View style={style.acsistente}>
+          <Text style={[style.texto, { fontSize: 25 }]}>ACSISTENTE</Text>
+        </View>
+        <TouchableOpacity style={style.hambr} onPress={() => setModal(true)}>
+          <FontAwesome name="navicon" size={30} color="#ffffff" />
+        </TouchableOpacity>
         <View style={[style.content, style.contenthome]}>
           <TouchableOpacity
             style={[style.botao, style.cadastros]}
@@ -244,9 +277,9 @@ export default function App() {
               style={{ textAlign: "center" }}
               name="users"
               size={60}
-              color="#ffffff"
+              color="#26A20A"
             />
-            <Text style={style.texto}>CADASTROS</Text>
+            <Text style={style.btntexto}>CADASTROS</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[style.botao, style.cadastros]}
@@ -256,9 +289,9 @@ export default function App() {
               style={{ textAlign: "center" }}
               name="clipboard-list"
               size={60}
-              color="#ffffff"
+              color="#26A20A"
             />
-            <Text style={style.texto}>SISTEMATICA</Text>
+            <Text style={style.btntexto}>SISTEMATICA</Text>
           </TouchableOpacity>
         </View>
         <Text style={style.msg}>
@@ -271,7 +304,7 @@ export default function App() {
           style={[style.botao, style.btncadastrar]}
           onPress={() => setEstado("telaCadastro")}
         >
-          <Text style={style.texto}>CADASTRAR CRIANÇA</Text>
+          <Text style={[style.texto, { fontSize: 17 }]}>CADASTRAR CRIANÇA</Text>
         </TouchableOpacity>
       </View>
     );
@@ -346,7 +379,12 @@ export default function App() {
                     {`\n`}Dn: {item.dataNascimento}
                   </Text>
                   <TouchableOpacity onPress={() => removerPorId(item.id)}>
-                    <AntDesign name="delete" size={35} color="black" />
+                    <AntDesign
+                      style={{ marginEnd: 13, opacity: 0.7 }}
+                      name="delete"
+                      size={30}
+                      color="red"
+                    />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
