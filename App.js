@@ -17,8 +17,8 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { Lato_400Regular } from "@expo-google-fonts/lato";
 import { useFonts } from "expo-font";
 import style from "./style/style.js";
-import Crianca from "./componentes/crianca.js";
-import Vacina from "./componentes/vacina.js";
+import Crianca from "./src/componentes/crianca.js";
+import Vacina from "./src/componentes/vacina.js";
 /* NAVEGACAO
   "home"
   "telaCadastro"
