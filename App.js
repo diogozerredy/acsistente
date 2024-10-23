@@ -1,4 +1,3 @@
-import { Picker } from "@react-native-picker/picker";
 import React, { useState, useEffect } from "react";
 import {
   Text,
@@ -20,7 +19,6 @@ import { useFonts } from "expo-font";
 import style from "./style/style.js";
 import Crianca from "./src/objetos/crianca.js";
 import Vacina from "./src/objetos/vacina.js";
-import { set } from "date-fns";
 /* NAVEGACAO
   "home"
   "telaCadastro"
@@ -44,28 +42,49 @@ export default function App() {
 
   const [criancaSelecionada, setCriancaSelecionada] = useState(null);
 
+  const [VacinaSelecionada, setVacinaSelecionada] = useState(null);
   const [VacinaAdicionada, setVacinaAdicionada] = useState("");
   const [local, setLocal] = useState("");
   const [lote, setLote] = useState("");
   const [tecnico, setTecnico] = useState("");
   const [data, setData] = useState("");
-  const [vacinas] = useState([
-    new Vacina("BCG"),
-    new Vacina("Hepatite B"),
-    new Vacina("Hepatite A"),
-    new Vacina("Treta Viral"),
-    new Vacina("Penta"),
-    new Vacina("VIP"),
-    new Vacina("Pneumocócica 10V"),
-    new Vacina("Rotavírus humano"),
-    new Vacina("Meningocócica C"),
-    new Vacina("Tríplice viral"),
-    new Vacina("DTP"),
-    new Vacina("VOP"),
-    new Vacina("Varicela"),
-    new Vacina("HPV"),
-    new Vacina("Influenza"),
-    new Vacina("Febre Amarela"),
+  const [Todasvacinas] = useState([
+    new Vacina("BCG", "DoseUnica", "Ao Nascer"),
+    new Vacina("Hepatite B", "Dose ao Nascer"),
+
+    new Vacina("Penta", "Dose1", 2),
+    new Vacina("VIP", "Dose1", 2),
+    new Vacina("Rotavírus humano", "Dose1", 2),
+    new Vacina("Pneumocócica 10V", "Dose1", 2),
+
+    new Vacina("Meningocócica C", "Dose1", 3),
+
+    new Vacina("Penta", "Dose2", 4),
+    new Vacina("VIP", "Dose2", 4),
+    new Vacina("Rotavírus humano", "Dose2", 4),
+    new Vacina("Pneumocócica 10V", "Dose2", 4),
+
+    new Vacina("Meningocócica C", "Dose2", 5),
+
+    new Vacina("Penta", "Dose3", 6),
+    new Vacina("VIP", "Dose3", 6),
+
+    new Vacina("Febre Amarela", "Dose1", 9),
+
+    new Vacina("Pneumocócica 10V", "Reforço", 12),
+    new Vacina("Meningocócica C", "Reforço", 12),
+    new Vacina("Tríplice viral", "Dose1", 12),
+    new Vacina("Tríplice viral", "Dose2", 15),
+
+    new Vacina("DTP", "1°Reforço", 15),
+    new Vacina("VOP", "1°Reforço", 15),
+    new Vacina("Hepatite A", "UmaDose", 15),
+    new Vacina("Treta Viral", "UmaDose", 15),
+
+    new Vacina("DTP", "2°Reforço", 48),
+    new Vacina("VOP", "2°Reforço", 48),
+    new Vacina("Febre Amarela", "Dose1", 48),
+    new Vacina("Varicela", "UmaDose", 48),
   ]);
   const [message, setMessage] = useState("");
   const [mensagemVacina, setmensagemVacina] = useState([]);
@@ -111,6 +130,7 @@ export default function App() {
     }
     const novaCrianca = new Crianca(nomeCrianca, dataNascimento);
     novaCrianca.id = uuid.v4();
+    novaCrianca.vacinas = Todasvacinas;
     setCriancas([...criancas, novaCrianca]);
     setMessage(`${nomeCrianca} cadastrada com sucesso!`);
     setNomeCrianca("");
@@ -122,11 +142,11 @@ export default function App() {
     let dnValidar = DNConvert(dataNascimento);
 
     if (!nomeCrianca) {
-      errors.nomeCrianca = "*nome é obrigatório";
+      errors.nomeCrianca = "campo obrigatório*";
       validar = false;
     }
     if (!dataNascimento) {
-      errors.dataNascimento = "*data de nascimento é obrigatório";
+      errors.dataNascimento = "campo obrigatório*";
       validar = false;
     } else {
       const partes = dataNascimento.split("/");
@@ -158,18 +178,12 @@ export default function App() {
       errors.data = "*campo Obrigatorio";
       validar = false;
     }
-    if (!local) {
-      errors.local = "*campo Obrigatorio";
-      validar = false;
-    }
+
     if (!lote) {
       errors.lote = "*campo Obrigatorio";
       validar = false;
     }
-    if (!tecnico) {
-      errors.tecnico = "*campo Obrigatorio";
-      validar = false;
-    }
+
     setErrors(errors);
     return validar;
   };
@@ -178,17 +192,20 @@ export default function App() {
     if (!validarInputvacina()) {
       return;
     }
-    const vacina = vacinas.find((v) => v.nome === VacinaAdicionada);
+    const vacina = Todasvacinas;
+    vacina.id = uuid.v4();
+    let id = vacina.id;
     if (vacina) {
-      vacina.adicionarDose({ local, lote, tecnico, data });
+      vacina.adicionarDose({ local, lote, tecnico, data, id });
       const atualizaCriancas = criancas.map((crianca) => {
         if (crianca === criancaSelecionada) {
           crianca.vacinas.push({
-            nome: VacinaAdicionada,
+            nome: VacinaSelecionada,
             local,
             lote,
             tecnico,
             data,
+            id,
           });
         }
         return crianca;
@@ -407,7 +424,7 @@ export default function App() {
         <Button
           title="Adicionar Vacina"
           onPress={() => {
-            setEstado("addVacina");
+            setEstado("selecionarVacina");
             setMessage("");
             setmensagemVacina([]);
           }}
@@ -424,18 +441,65 @@ export default function App() {
         <Button title="Voltar ao Início" onPress={() => setEstado("home")} />
       </View>
     );
+  } else if (estado === "selecionarVacina") {
+    return (
+      <View style={style.container}>
+        <Text style={[style.acsistente, style.texto]}>ACSISTENTE</Text>
+        <ScrollView style={style.content}>
+          {criancaSelecionada.vacinas.map((item) => {
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={{
+                  justifyContent: "center",
+                  alignContent: "center",
+                  backgroundColor: `#ffffff`,
+                  width: "95%",
+                  marginTop: 15,
+                  marginHorizontal: "2%",
+                  borderRadius: 5,
+                }}
+                onPress={() => {
+                  setVacinaSelecionada(item);
+                  setEstado("addVacina");
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ padding: 15, fontSize: 17 }}>
+                    Nome: {item.nome} {item.dose}
+                    {"\n"}
+                    Idade: {item.idade}
+                  </Text>
+                  <TouchableOpacity onPress={() => removerPorId(item.id)}>
+                    <AntDesign
+                      style={{ marginEnd: 13, opacity: 0.7 }}
+                      name="delete"
+                      size={30}
+                      color="red"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+        <TouchableOpacity
+          style={[style.botao, style.btncadastrar]}
+          onPress={() => setEstado("home")}
+        >
+          <Text style={style.texto}>VOLTAR</Text>
+        </TouchableOpacity>
+      </View>
+    );
   } else if (estado === "addVacina") {
     return (
       <View style={style.container}>
-        <Picker
-          selectedValue={VacinaAdicionada}
-          onValueChange={(itemValue) => setVacinaAdicionada(itemValue)}
-        >
-          <Picker.Item label="Selecione uma vacina" value="" />
-          {vacinas.map((vacina, index) => (
-            <Picker.Item key={index} label={vacina.nome} value={vacina.nome} />
-          ))}
-        </Picker>
         <TextInput
           dataDetectorTypes={"calendarEvent"}
           placeholder="Data"
