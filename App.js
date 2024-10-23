@@ -192,33 +192,27 @@ export default function App() {
     if (!validarInputvacina()) {
       return;
     }
-    const vacina = Todasvacinas;
-    vacina.id = uuid.v4();
-    let id = vacina.id;
-    if (vacina) {
-      vacina.adicionarDose({ local, lote, tecnico, data, id });
-      const atualizaCriancas = criancas.map((crianca) => {
-        if (crianca === criancaSelecionada) {
-          crianca.vacinas.push({
-            nome: VacinaSelecionada,
-            local,
-            lote,
-            tecnico,
-            data,
-            id,
-          });
-        }
-        return crianca;
-      });
-      setCriancas(atualizaCriancas);
-      setMessage(`Vacina ${VacinaAdicionada} adicionada com sucesso!`);
-      setmensagemVacina([...mensagemVacina, VacinaAdicionada]);
-      setVacinaAdicionada("");
-      setLocal("");
-      setLote("");
-      setTecnico("");
-      setData("");
+    let dose = {
+      local,
+      lote,
+      tecnico,
+      data,
+    };
+    const vacinaEncontrada = criancaSelecionada.vacinas.find(
+      (v) =>
+        v.nome === VacinaSelecionada.nome && v.dose === VacinaSelecionada.dose
+    );
+    if (vacinaEncontrada) {
+      vacinaEncontrada.adicionarDose(dose);
     }
+    setCriancas([...criancas]);
+    setMessage(`Vacina ${VacinaSelecionada.nome} adicionada com sucesso!`);
+    setmensagemVacina([...mensagemVacina, VacinaSelecionada]);
+    setVacinaAdicionada("");
+    setLocal("");
+    setLote("");
+    setTecnico("");
+    setData("");
   }
 
   useEffect(() => {
@@ -474,7 +468,8 @@ export default function App() {
                   <Text style={{ padding: 15, fontSize: 17 }}>
                     Nome: {item.nome} {item.dose}
                     {"\n"}
-                    Idade: {item.idade}
+                    Idade: {item.idade} {"\n"}
+                    {item.id}
                   </Text>
                   <TouchableOpacity onPress={() => removerPorId(item.id)}>
                     <AntDesign
@@ -530,43 +525,56 @@ export default function App() {
         />
         {errors.tecnico && <Text style={style.error}>{errors.tecnico}</Text>}
         <Button title="Adicionar Dose" onPress={telaAddDose} />
-        <Button title="Voltar" onPress={() => setEstado("crianca")} />
+        <Button
+          title="Voltar"
+          onPress={() => {
+            setEstado("crianca");
+            setMessage("");
+          }}
+        />
         <Button title="Voltar ao Início" onPress={() => setEstado("home")} />
         {message && <Text>{message}</Text>}
-        {mensagemVacina.map((item) => {
+        {/* {mensagemVacina.map((item) => {
           return <Text>Vacina: {item}</Text>;
-        })}
+        })} */}
       </View>
     );
   } else if (estado === "verVacina") {
     return (
-      <View style={style.container}>
+      <ScrollView style={style.container}>
         {criancaSelecionada.vacinas.length > 0 ? (
-          criancaSelecionada.vacinas.map((item, index) => {
-            return (
-              <View
-                style={{
-                  marginTop: 20,
-                  borderWidth: 1,
-                  borderColor: "blue",
-                }}
-                key={index}
-              >
-                <Text style={{ fontSize: 20 }}>Nome: {item.nome}</Text>
-                <Text>Data: {item.data}</Text>
-                <Text>Local: {item.local}</Text>
-                <Text>Lote: {item.lote}</Text>
-                <Text>Técnico: {item.tecnico}</Text>
-              </View>
-            );
-          })
+          criancaSelecionada.vacinas.map((vacina) => (
+            <View
+              style={{
+                marginTop: 20,
+                borderWidth: 1,
+                borderColor: "blue",
+              }}
+              key={vacina.id}
+            >
+              <Text style={{ fontSize: 20 }}>Nome: {vacina.nome}</Text>
+              {/* Acesso às propriedades da vacina individualmente */}
+              {vacina.doses.length > 0 ? (
+                vacina.doses.map((dose, i) => (
+                  <View key={i}>
+                    <Text>Data: {dose.data}</Text>
+                    <Text>Local: {dose.local}</Text>
+                    <Text>Lote: {dose.lote}</Text>
+                    <Text>Técnico: {dose.tecnico}</Text>
+                  </View>
+                ))
+              ) : (
+                <Text>Nenhuma dose aplicada</Text>
+              )}
+            </View>
+          ))
         ) : (
           <Text>Nenhuma vacina adicionada</Text>
         )}
         <View style={{ marginTop: 10 }}>
           <Button title="Voltar" onPress={() => setEstado("crianca")} />
         </View>
-      </View>
+      </ScrollView>
     );
   } else if (estado === "editarCrianca") {
     return (
