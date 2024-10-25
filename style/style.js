@@ -8,7 +8,6 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    paddingTop: Constants.statusBarHeight,
     backgroundColor: "#f0f0f0",
     flex: 1,
   },
@@ -21,14 +20,14 @@ export default StyleSheet.create({
     padding: 30,
     zIndex: 2,
   },
-  hambr: { position: "absolute", left: 20, top: 65, zIndex: 5 },
+
   content: {
     maxHeight: "78%",
-    backgroundColor: "#f0f0f0",
     gap: 20,
   },
   contenthome: {
     flexDirection: "row",
+    marginTop: 50,
   },
   texto: {
     color: "#FFFFFF",
