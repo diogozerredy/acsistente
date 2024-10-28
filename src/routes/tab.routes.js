@@ -7,6 +7,7 @@ const Tab = createBottomTabNavigator();
 export default function TabRoutes() {
   return (
     <Tab.Navigator
+      initialRouteName="INICIO"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "white",

@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 
 export default function AdicionarVacina({ route, navigation }) {
-  const { crianca } = route.params;
-  const [data, setData] = useState("");
-  const [local, setLocal] = useState("");
-  const [lote, setLote] = useState("");
-  const [tecnico, setTecnico] = useState("");
+  const { vacina } = route.params || {};
+
+  if (!vacina) {
+    return <Text>Erro: Dados da vacina não foram encontrados.</Text>;
+  }
+
+  const [data, setData] = useState(vacina.data || "");
+  const [local, setLocal] = useState(vacina.local || "");
+  const [lote, setLote] = useState(vacina.lote || "");
+  const [tecnico, setTecnico] = useState(vacina.tecnico || "");
   const [errors, setErrors] = useState({});
 
   const adicionarDose = () => {
@@ -20,9 +25,13 @@ export default function AdicionarVacina({ route, navigation }) {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      const novaDose = { data, local, lote, tecnico };
-      crianca.vacinas.push(novaDose);
-      navigation.navigate("VerVacinas", { crianca });
+      const vacinaAtualizada = { ...vacina, data, local, lote, tecnico };
+
+      navigation.navigate({
+        name: "VerVacina",
+        params: { doseAtualizada: vacinaAtualizada },
+        merge: true,
+      });
     }
   };
 

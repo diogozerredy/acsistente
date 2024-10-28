@@ -22,7 +22,6 @@ export default StyleSheet.create({
   },
 
   content: {
-    maxHeight: "78%",
     gap: 20,
   },
   contenthome: {

@@ -5,11 +5,10 @@ import style from "../../style/style.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CriancaContext } from "../routes/CriancaContext.js";
 
-export default function ListaCriancas({ route, navigation }) {
+export default function ListaCriancas({ navigation }) {
   const { criancas, removerCrianca } = useContext(CriancaContext);
   return (
     <SafeAreaView style={style.container}>
-      <Text style={[style.acsistente, style.texto]}>ACSISTENTE</Text>
       <ScrollView style={style.content}>
         {criancas.map((item) => (
           <TouchableOpacity
@@ -24,7 +23,7 @@ export default function ListaCriancas({ route, navigation }) {
               borderRadius: 5,
             }}
             onPress={() =>
-              navigation.navigate("EditarCrianca", { crianca: item })
+              navigation.navigate("TelaCrianca", { crianca: item })
             }
           >
             <View
