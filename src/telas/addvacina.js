@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import style from "../../style/style";
 
 export default function AdicionarVacina({ route, navigation }) {
   const { vacina } = route.params || {};
@@ -36,20 +38,23 @@ export default function AdicionarVacina({ route, navigation }) {
   };
 
   return (
-    <View>
-      <TextInput placeholder="Data" value={data} onChangeText={setData} />
-      {errors.data && <Text>{errors.data}</Text>}
-      <TextInput placeholder="Local" value={local} onChangeText={setLocal} />
-      {errors.local && <Text>{errors.local}</Text>}
-      <TextInput placeholder="Lote" value={lote} onChangeText={setLote} />
-      {errors.lote && <Text>{errors.lote}</Text>}
-      <TextInput
-        placeholder="Técnico"
-        value={tecnico}
-        onChangeText={setTecnico}
-      />
-      {errors.tecnico && <Text>{errors.tecnico}</Text>}
-      <Button title="Adicionar Dose" onPress={adicionarDose} />
-    </View>
+    <SafeAreaView style={style.container}>
+      <View>
+        <Text>{vacina.nome}</Text>
+        <TextInput placeholder="Data" value={data} onChangeText={setData} />
+        {errors.data && <Text>{errors.data}</Text>}
+        <TextInput placeholder="Local" value={local} onChangeText={setLocal} />
+        {errors.local && <Text>{errors.local}</Text>}
+        <TextInput placeholder="Lote" value={lote} onChangeText={setLote} />
+        {errors.lote && <Text>{errors.lote}</Text>}
+        <TextInput
+          placeholder="Técnico"
+          value={tecnico}
+          onChangeText={setTecnico}
+        />
+        {errors.tecnico && <Text>{errors.tecnico}</Text>}
+        <Button title="Adicionar Dose" onPress={adicionarDose} />
+      </View>
+    </SafeAreaView>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 import { CriancaContext } from "../routes/CriancaContext";
 import style from "../../style/style";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TelaCrianca({ route, navigation }) {
   const { crianca } = route.params || {};
@@ -77,57 +78,67 @@ export default function TelaCrianca({ route, navigation }) {
   }
 
   return (
-    <View>
-      {editar ? (
-        <View>
-          <TextInput
-            style={{ borderBottomWidth: 1, marginBottom: 5 }}
-            placeholder="Nome da Criança"
-            value={nomeCrianca}
-            onChangeText={setNomeCrianca}
-          />
-          {errors.nomeCrianca && (
-            <Text style={style.error}>{errors.nomeCrianca}</Text>
-          )}
-          <TextInput
-            style={{ borderBottomWidth: 1, marginBottom: 5 }}
-            maxLength={10}
-            keyboardType="numeric"
-            value={dataNascimento}
-            onChangeText={telaDataNascimento}
-          />
-          {errors.dataNascimento && (
-            <Text style={style.error}>{errors.dataNascimento}</Text>
-          )}
-        </View>
-      ) : (
-        <View>
-          <Text
-            style={{ borderBottomWidth: 1, marginBottom: 5, paddingBottom: 5 }}
-          >
-            {nomeCrianca}
-          </Text>
-          <Text
-            style={{ borderBottomWidth: 1, marginBottom: 5, paddingBottom: 5 }}
-          >
-            {dataNascimento}
-          </Text>
-        </View>
-      )}
+    <SafeAreaView style={style.container}>
+      <View>
+        {editar ? (
+          <View>
+            <TextInput
+              style={{ borderBottomWidth: 1, marginBottom: 5 }}
+              placeholder="Nome da Criança"
+              value={nomeCrianca}
+              onChangeText={setNomeCrianca}
+            />
+            {errors.nomeCrianca && (
+              <Text style={style.error}>{errors.nomeCrianca}</Text>
+            )}
+            <TextInput
+              style={{ borderBottomWidth: 1, marginBottom: 5 }}
+              maxLength={10}
+              keyboardType="numeric"
+              value={dataNascimento}
+              onChangeText={telaDataNascimento}
+            />
+            {errors.dataNascimento && (
+              <Text style={style.error}>{errors.dataNascimento}</Text>
+            )}
+          </View>
+        ) : (
+          <View>
+            <Text
+              style={{
+                borderBottomWidth: 1,
+                marginBottom: 5,
+                paddingBottom: 5,
+              }}
+            >
+              {nomeCrianca}
+            </Text>
+            <Text
+              style={{
+                borderBottomWidth: 1,
+                marginBottom: 5,
+                paddingBottom: 5,
+              }}
+            >
+              {dataNascimento}
+            </Text>
+          </View>
+        )}
 
-      <Button title="Salvar" onPress={SalvarCrianca} />
-      <Button
-        title="remover"
-        onPress={() => {
-          removerCrianca(crianca.id);
-          navigation.goBack();
-        }}
-      />
-      <Button title="Editar" onPress={() => setEditar(true)} />
-      <Button
-        title="VACINAS"
-        onPress={() => navigation.navigate("VerVacina", { crianca: crianca })}
-      />
-    </View>
+        <Button title="Salvar" onPress={SalvarCrianca} />
+        <Button
+          title="remover"
+          onPress={() => {
+            removerCrianca(crianca.id);
+            navigation.goBack();
+          }}
+        />
+        <Button title="Editar" onPress={() => setEditar(true)} />
+        <Button
+          title="VACINAS"
+          onPress={() => navigation.navigate("VerVacina", { crianca: crianca })}
+        />
+      </View>
+    </SafeAreaView>
   );
 }

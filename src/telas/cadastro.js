@@ -4,6 +4,7 @@ import Crianca from "../objetos/crianca.js";
 import Vacina from "../objetos/vacina.js";
 import style from "../../style/style.js";
 import { CriancaContext } from "../routes/CriancaContext.js";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Cadastro({ navigation }) {
   const { adicionarCrianca } = useContext(CriancaContext);
@@ -14,7 +15,7 @@ export default function Cadastro({ navigation }) {
   const [errors, setErrors] = useState({});
   const [Todasvacinas] = useState([
     new Vacina("BCG", "DoseUnica", "Ao Nascer"),
-    new Vacina("Hepatite B", "Dose ao Nascer"),
+    new Vacina("Hepatite B", "DoseUnica", "Ao Nascer"),
     new Vacina("Penta", "Dose1", 2),
     new Vacina("VIP", "Dose1", 2),
     new Vacina("Rotavírus humano", "Dose1", 2),
@@ -115,29 +116,31 @@ export default function Cadastro({ navigation }) {
   }
 
   return (
-    <View style={style.container}>
-      <TextInput
-        placeholder="Nome da Criança"
-        onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
-        value={nomeCrianca}
-        style={{ borderBottomWidth: 1, marginBottom: 5 }}
-      />
-      {errors.nomeCrianca && (
-        <Text style={style.error}>{errors.nomeCrianca}</Text>
-      )}
-      <TextInput
-        maxLength={10}
-        value={dataNascimento}
-        keyboardType="numeric"
-        placeholder="Data de Nascimento (DD/MM/AAAA)"
-        onChangeText={telaDataNascimento}
-        style={{ borderBottomWidth: 1, marginBottom: 5 }}
-      />
-      {errors.dataNascimento && (
-        <Text style={style.error}>{errors.dataNascimento}</Text>
-      )}
-      <Button title="Salvar" onPress={telaCadastrarCrianca} />
-      <Text>{message}</Text>
-    </View>
+    <SafeAreaView style={style.container}>
+      <View style={style.content}>
+        <TextInput
+          placeholder="Nome da Criança"
+          onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
+          value={nomeCrianca}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
+        />
+        {errors.nomeCrianca && (
+          <Text style={style.error}>{errors.nomeCrianca}</Text>
+        )}
+        <TextInput
+          maxLength={10}
+          value={dataNascimento}
+          keyboardType="numeric"
+          placeholder="Data de Nascimento (DD/MM/AAAA)"
+          onChangeText={telaDataNascimento}
+          style={{ borderBottomWidth: 1, marginBottom: 5 }}
+        />
+        {errors.dataNascimento && (
+          <Text style={style.error}>{errors.dataNascimento}</Text>
+        )}
+        <Button title="Salvar" onPress={telaCadastrarCrianca} />
+        <Text>{message}</Text>
+      </View>
+    </SafeAreaView>
   );
 }
