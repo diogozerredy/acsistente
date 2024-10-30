@@ -137,4 +137,57 @@ export default StyleSheet.create({
     marginTop: 3,
     color: "red",
   },
+  //DetalhesCriancas
+  vieweditarinput: {
+    borderWidth: 1,
+    borderRadius: 25,
+    padding: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  confirmar: { flexDirection: "row", gap: 10 },
+  editarinput: { width: "80%" },
+  //modal
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    justifyContent: "space-between",
+    width: "70%",
+    height: 200,
+    margin: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  btnview: {
+    flexDirection: "row",
+    gap: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 5,
+    elevation: 2,
+    backgroundColor: "#26A20A",
+  },
+  textStyle: {
+    fontSize: 12,
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    fontSize: 17,
+  },
 });

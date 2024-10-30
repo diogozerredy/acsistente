@@ -1,5 +1,12 @@
 import React, { useState, useContext } from "react";
-import { View, TextInput, Button, Text, TouchableOpacity } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  Text,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
 import { CriancaContext } from "../routes/CriancaContext";
 import style from "../../style/style";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -21,6 +28,27 @@ export default function TelaCrianca({ route, navigation }) {
   const [editarMae, setEditarMae] = useState(false);
   const [editarDn, setEditarDn] = useState(false);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const [valorNomeOriginal, setValorNomeOriginal] = useState(
+    crianca.nomeCrianca
+  );
+  const [valorMaeOriginal, setValorMaeOriginal] = useState(crianca.nomeMae);
+  const [valorDnOriginal, setValorDnOriginal] = useState(
+    crianca.dataNascimento
+  );
+  const cancelarEdicao = (tipo) => {
+    if (tipo === "nome") {
+      setNomeCrianca(valorNomeOriginal);
+      setEditarNome(false);
+    } else if (tipo === "mae") {
+      setNomeMae(valorMaeOriginal);
+      setEditarMae(false);
+    } else if (tipo === "dn") {
+      setDataNascimento(valorDnOriginal);
+      setEditarDn(false);
+    }
+  };
   const SalvarCrianca = () => {
     if (!validarInput()) {
       return;
@@ -93,46 +121,73 @@ export default function TelaCrianca({ route, navigation }) {
 
   return (
     <SafeAreaView style={style.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={style.centeredView}>
+          <View style={style.modalView}>
+            <Text style={style.modalText}>
+              Deseja realmente excluir{" "}
+              <Text style={{ fontWeight: "bold" }}>{crianca.nomeCrianca}?</Text>
+            </Text>
+            <View style={style.btnview}>
+              <TouchableOpacity
+                style={style.button}
+                onPress={() => setModalVisible(false)}
+              >
+                <Text style={style.textStyle}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.button}
+                onPress={() => {
+                  removerCrianca(crianca.id);
+                  navigation.goBack();
+                }}
+              >
+                <Text style={style.textStyle}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
       <View style={[style.content, style.detalhes]}>
         {editarNome ? (
           <View>
-            <TextInput
-              style={{ borderBottomWidth: 1, marginBottom: 5 }}
-              placeholder="Nome da Criança"
-              value={nomeCrianca}
-              onChangeText={setNomeCrianca}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setEditarNome(false);
-              }}
-            >
-              <Feather name="x" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={SalvarCrianca}>
-              <Feather name="check" size={24} color="black" />
-            </TouchableOpacity>
-
+            <View style={style.vieweditarinput}>
+              <TextInput
+                style={style.editarinput}
+                placeholder="Nome da Criança"
+                value={nomeCrianca}
+                onChangeText={setNomeCrianca}
+              />
+              <View style={style.confirmar}>
+                <TouchableOpacity onPress={() => cancelarEdicao("nome")}>
+                  <Feather name="x" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={SalvarCrianca}>
+                  <Feather name="check" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
             {errors.nomeCrianca && (
               <Text style={style.error}>{errors.nomeCrianca}</Text>
             )}
           </View>
         ) : (
-          <View>
-            <Text
-              style={{
-                borderBottomWidth: 1,
-                marginBottom: 5,
-                paddingBottom: 5,
-              }}
-            >
-              {nomeCrianca}
-            </Text>
+          <View style={style.vieweditarinput}>
+            <Text>{nomeCrianca}</Text>
             <TouchableOpacity
               onPress={() => {
+                setValorNomeOriginal(nomeCrianca);
                 setEditarNome(true);
-                setEditarMae(false);
+                cancelarEdicao("dn");
                 setEditarDn(false);
+                cancelarEdicao("mae");
+                setEditarMae(false);
               }}
             >
               <AntDesign name="edit" size={24} color="black" />
@@ -141,38 +196,36 @@ export default function TelaCrianca({ route, navigation }) {
         )}
         {editarMae ? (
           <View>
-            <TextInput
-              style={{ borderBottomWidth: 1, marginBottom: 5 }}
-              placeholder="Nome da Mãe"
-              value={nomeMae}
-              onChangeText={setNomeMae}
-            />
-            <TouchableOpacity onPress={() => setEditarMae(false)}>
-              <Feather name="x" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={SalvarCrianca}>
-              <Feather name="check" size={24} color="black" />
-            </TouchableOpacity>
-
+            <View style={style.vieweditarinput}>
+              <TextInput
+                style={style.editarinput}
+                placeholder="Nome da Mãe"
+                value={nomeMae}
+                onChangeText={setNomeMae}
+              />
+              <View style={style.confirmar}>
+                <TouchableOpacity onPress={() => cancelarEdicao("mae")}>
+                  <Feather name="x" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={SalvarCrianca}>
+                  <Feather name="check" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
             {errors.nomeMae && (
               <Text style={style.error}>{errors.nomeMae}</Text>
             )}
           </View>
         ) : (
-          <View>
-            <Text
-              style={{
-                borderBottomWidth: 1,
-                marginBottom: 5,
-                paddingBottom: 5,
-              }}
-            >
-              {nomeMae}
-            </Text>
+          <View style={style.vieweditarinput}>
+            <Text>{nomeMae}</Text>
             <TouchableOpacity
               onPress={() => {
+                setValorMaeOriginal(nomeMae);
                 setEditarMae(true);
+                cancelarEdicao("nome");
                 setEditarNome(false);
+                cancelarEdicao("dn");
                 setEditarDn(false);
               }}
             >
@@ -182,39 +235,38 @@ export default function TelaCrianca({ route, navigation }) {
         )}
         {editarDn ? (
           <View>
-            <TextInput
-              style={{ borderBottomWidth: 1, marginBottom: 5 }}
-              maxLength={10}
-              placeholder="Data de Nascimento"
-              keyboardType="numeric"
-              value={dataNascimento}
-              onChangeText={telaDataNascimento}
-            />
-            <TouchableOpacity onPress={() => setEditarDn(false)}>
-              <Feather name="x" size={24} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={SalvarCrianca}>
-              <Feather name="check" size={24} color="black" />
-            </TouchableOpacity>
+            <View style={style.vieweditarinput}>
+              <TextInput
+                style={style.editarinput}
+                maxLength={10}
+                placeholder="Data de Nascimento"
+                keyboardType="numeric"
+                value={dataNascimento}
+                onChangeText={telaDataNascimento}
+              />
+              <View style={style.confirmar}>
+                <TouchableOpacity onPress={() => cancelarEdicao("dn")}>
+                  <Feather name="x" size={24} color="black" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={SalvarCrianca}>
+                  <Feather name="check" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+            </View>
             {errors.dataNascimento && (
               <Text style={style.error}>{errors.dataNascimento}</Text>
             )}
           </View>
         ) : (
-          <View>
-            <Text
-              style={{
-                borderBottomWidth: 1,
-                marginBottom: 5,
-                paddingBottom: 5,
-              }}
-            >
-              {dataNascimento}
-            </Text>
+          <View style={style.vieweditarinput}>
+            <Text>{dataNascimento}</Text>
             <TouchableOpacity
               onPress={() => {
+                setValorDnOriginal(dataNascimento);
                 setEditarDn(true);
+                cancelarEdicao("nome");
                 setEditarNome(false);
+                cancelarEdicao("mae");
                 setEditarMae(false);
               }}
             >
@@ -224,13 +276,7 @@ export default function TelaCrianca({ route, navigation }) {
         )}
 
         <Button title="Salvar" onPress={SalvarCrianca} />
-        <Button
-          title="Remover"
-          onPress={() => {
-            removerCrianca(crianca.id);
-            navigation.goBack();
-          }}
-        />
+        <Button title="Remover" onPress={() => setModalVisible(true)} />
         <Button
           title="VACINAS"
           onPress={() => navigation.navigate("VerVacina", { crianca: crianca })}
