@@ -75,9 +75,9 @@ export default function VerVacinas({ route, navigation }) {
     } else if (idade >= 12) {
       const anos = Math.floor(idade / 12);
       const meses = idade % 12;
-      return `${anos} Ano${anos > 1 ? "s" : ""} ${meses} Mês${
-        meses > 1 ? "es" : ""
-      }`;
+      return `${anos} Ano${anos > 1 ? "s" : ""} ${
+        meses == 0 ? "" : `${meses} Mes`
+      }${meses > 1 ? "es" : ""}`;
     }
     return `${idade} meses`;
   };

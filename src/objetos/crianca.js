@@ -1,9 +1,11 @@
 export default class Crianca {
-  constructor(nome, dataNascimento, idade) {
+  constructor(nome, dataNascimento, mae) {
     this.id = 0;
     this.nomeCrianca = nome;
     this.dataNascimento = dataNascimento;
-    this.idade = idade;
+    this.nomeMae = mae;
+    this.idade;
+
     this.vacinas = []; // Inicializa a lista de vacinas
   }
 }

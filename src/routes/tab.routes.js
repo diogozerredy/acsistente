@@ -7,46 +7,35 @@ const Tab = createBottomTabNavigator();
 export default function TabRoutes() {
   return (
     <Tab.Navigator
-      initialRouteName="INICIO"
-      screenOptions={{
-        headerShown: false,
-        tabBarActiveTintColor: "white",
-        tabBarStyle: { backgroundColor: "green", height: 60 },
-        tabBarLabelStyle: {
-          backgroundColor: "blue",
-          fontSize: 13,
-          marginBottom: 5,
+      initialRouteName="Inicio"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+
+          if (route.name === "Inicio") {
+            iconName = "home";
+          } else if (route.name === "ListaCriancas") {
+            iconName = "users";
+          }
+          size = 30;
+          return <FontAwesome5 name={iconName} size={size} color={color} />;
         },
-        // tabBarItemStyle: { backgroundColor: "red" },
-        tabBarIconStyle: { backgroundColor: "yellow" },
-        tabBarActiveBackgroundColor: "gray",
-      }}
+
+        tabBarActiveTintColor: "#26A20A",
+        tabBarInactiveTintColor: "#FFFFFF",
+        headerShown: false,
+        tabBarActiveBackgroundColor: "white",
+        tabBarLabelStyle: { fontSize: 17 },
+        tabBarStyle: {
+          height: 60,
+          backgroundColor: "#26A20A",
+          paddingHorizontal: 30,
+        },
+      })}
     >
+      <Tab.Screen name="Inicio" component={Home} />
       <Tab.Screen
-        options={{
-          tabBarIcon: (color, size) => (
-            <FontAwesome5
-              style={{ textAlign: "center" }}
-              name="home"
-              size={30}
-              color={"white"}
-            />
-          ),
-        }}
-        name="INICIO"
-        component={Home}
-      />
-      <Tab.Screen
-        options={{
-          tabBarIcon: (color, size) => (
-            <FontAwesome5
-              style={{ textAlign: "center" }}
-              name="users"
-              size={30}
-              color={"white"}
-            />
-          ),
-        }}
+        options={{ title: "Crianças" }}
         name="ListaCriancas"
         component={ListaCriancas}
       />

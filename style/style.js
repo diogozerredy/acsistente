@@ -4,28 +4,20 @@ export default StyleSheet.create({
   //HOME
   Home: {
     gap: 30,
-    alignItems: "center",
   },
   container: {
     backgroundColor: "#f0f0f0",
     flex: 1,
   },
-  acsistente: {
-    justifyContent: "center",
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#26A20A",
-    width: "100%",
-    padding: 30,
-    zIndex: 2,
-  },
 
   content: {
-    gap: 20,
+    gap: 15,
+    backgroundColor: "#f0f0f0",
   },
   contenthome: {
     flexDirection: "row",
-    marginTop: 50,
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
   texto: {
     color: "#FFFFFF",
@@ -41,8 +33,6 @@ export default StyleSheet.create({
   botao: {
     alignContent: "center",
     justifyContent: "center",
-    gap: 20,
-    borderRadius: 8,
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.5,
@@ -51,14 +41,19 @@ export default StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   btncadastrar: {
+    flexDirection: "row",
+    alignItems: "center",
     position: "absolute",
     right: 21,
     bottom: 15,
     width: "90%",
-    padding: 50,
+    padding: 20,
     backgroundColor: "#26A20A",
+    gap: 20,
+    borderRadius: 8,
   },
   cadastros: {
+    borderRadius: 10,
     width: 170,
     height: 170,
   },
@@ -71,49 +66,75 @@ export default StyleSheet.create({
     padding: 15,
     textAlign: "justify",
   },
-  //modal
-  centeredView: {
-    flex: 1,
+  //LISTAR CRIANCA
+  Lista: {
+    borderWidth: 0.5,
+    borderColor: "#26A20A",
     justifyContent: "center",
-    alignItems: "center",
-  },
-  modalView: {
-    width: "75%",
-    height: "100%",
-    position: "absolute",
-    left: 0,
-    top: 0,
-    backgroundColor: "white",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
+    alignContent: "center",
+    backgroundColor: "#ffffff",
+    width: "95%",
     marginBottom: 15,
-    textAlign: "center",
+    marginHorizontal: "2%",
+    borderRadius: 5,
   },
+  nomeLista: { fontWeight: "bold", fontSize: 16 },
+  textoLista: { fontSize: 15, lineHeight: 20 },
+  apagar: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  btnListar: {
+    alignItems: "center",
+    opacity: 0.9,
+    borderRadius: 75,
+    width: 60,
+    height: 60,
+    backgroundColor: "#26A20A",
+  },
+  // CADASTRO
+  viewinput: { padding: 7, height: "100%", justifyContent: "space-between" },
+  input: {
+    width: "100%",
+    borderWidth: 0.7,
+    marginTop: 15,
+    padding: 10,
+    borderRadius: 25,
+    borderColor: "#26A20A",
+  },
+  btnsalvar: {
+    borderRadius: 100,
+    width: "90%",
+    height: 65,
+    backgroundColor: "#26A20A",
+    marginTop: 20,
+    justifyContent: "center",
+    marginHorizontal: "5%",
+  },
+  viewbtn: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginVertical: 50,
+  },
+  btnav: {
+    justifyContent: "center",
+    width: 80,
+    height: 80,
+  },
+  cadtexto: {
+    textAlign: "center",
+    marginTop: 10,
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  //tela criancas
+  detalhes: { padding: 20 },
   //erros
   error: {
-    marginBottom: 10,
+    marginStart: 10,
+    marginBottom: 5,
+    marginTop: 3,
     color: "red",
   },
 });

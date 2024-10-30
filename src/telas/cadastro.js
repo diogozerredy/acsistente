@@ -1,15 +1,17 @@
 import React, { useState, useContext } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import Crianca from "../objetos/crianca.js";
 import Vacina from "../objetos/vacina.js";
 import style from "../../style/style.js";
 import { CriancaContext } from "../routes/CriancaContext.js";
 import { SafeAreaView } from "react-native-safe-area-context";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 export default function Cadastro({ navigation }) {
   const { adicionarCrianca } = useContext(CriancaContext);
 
   const [nomeCrianca, setNomeCrianca] = useState("");
+  const [nomeMae, setNomeMae] = useState("");
   const [dataNascimento, setDataNascimento] = useState("");
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
@@ -48,16 +50,17 @@ export default function Cadastro({ navigation }) {
       return;
     }
 
-    const novaCrianca = new Crianca(nomeCrianca, dataNascimento);
+    const novaCrianca = new Crianca(nomeCrianca, dataNascimento, nomeMae);
     novaCrianca.vacinas = Todasvacinas;
     novaCrianca.id = Date.now(); // ID único
 
     await adicionarCrianca(novaCrianca);
 
-    setMessage(`${nomeCrianca} cadastrada com sucesso!`);
+    setMessage(`"${nomeCrianca}" Cadastro Realizado Com Sucesso!`);
     setNomeCrianca("");
+    setNomeMae("");
     setDataNascimento("");
-    navigation.navigate("Homestack", { screen: "ListaCriancas" });
+    // navigation.navigate("Homestack", { screen: "ListaCriancas" });
   };
 
   const telaDataNascimento = (value) => {
@@ -74,11 +77,15 @@ export default function Cadastro({ navigation }) {
     let dnValidar = DNConvert(dataNascimento);
 
     if (!nomeCrianca) {
-      errors.nomeCrianca = "campo obrigatório*";
+      errors.nomeCrianca = "Campo Obrigatório*";
+      validar = false;
+    }
+    if (!nomeMae) {
+      errors.nomeMae = "Campo Obrigatório*";
       validar = false;
     }
     if (!dataNascimento) {
-      errors.dataNascimento = "campo obrigatório*";
+      errors.dataNascimento = "Campo Obrigatório*";
       validar = false;
     } else {
       const partes = dataNascimento.split("/");
@@ -92,10 +99,10 @@ export default function Cadastro({ navigation }) {
         objetoData.getDate() !== dia
       ) {
         errors.dataNascimento =
-          "*Verifique se voce digitou a data corretamente";
+          "*Verifique Se Voce Digitou a Data Corretamente";
         validar = false;
       } else if (dnValidar && dnValidar.getTime() >= new Date().getTime()) {
-        errors.dataNascimento = "*Voce digitou uma data futura";
+        errors.dataNascimento = "*Voce Digitou Uma Data inválida";
         validar = false;
       }
     }
@@ -117,29 +124,76 @@ export default function Cadastro({ navigation }) {
 
   return (
     <SafeAreaView style={style.container}>
-      <View style={style.content}>
-        <TextInput
-          placeholder="Nome da Criança"
-          onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
-          value={nomeCrianca}
-          style={{ borderBottomWidth: 1, marginBottom: 5 }}
-        />
-        {errors.nomeCrianca && (
-          <Text style={style.error}>{errors.nomeCrianca}</Text>
-        )}
-        <TextInput
-          maxLength={10}
-          value={dataNascimento}
-          keyboardType="numeric"
-          placeholder="Data de Nascimento (DD/MM/AAAA)"
-          onChangeText={telaDataNascimento}
-          style={{ borderBottomWidth: 1, marginBottom: 5 }}
-        />
-        {errors.dataNascimento && (
-          <Text style={style.error}>{errors.dataNascimento}</Text>
-        )}
-        <Button title="Salvar" onPress={telaCadastrarCrianca} />
-        <Text>{message}</Text>
+      <View style={style.viewinput}>
+        <View>
+          <TextInput
+            placeholder="Nome da Criança"
+            onChangeText={(nomeCrianca) => setNomeCrianca(nomeCrianca)}
+            value={nomeCrianca}
+            style={style.input}
+          />
+          {errors.nomeCrianca && (
+            <Text style={style.error}>{errors.nomeCrianca}</Text>
+          )}
+          <TextInput
+            placeholder="Nome da Mãe"
+            onChangeText={(mae) => setNomeMae(mae)}
+            value={nomeMae}
+            style={style.input}
+          />
+          {errors.nomeMae && <Text style={style.error}>{errors.nomeMae}</Text>}
+          <TextInput
+            maxLength={10}
+            value={dataNascimento}
+            keyboardType="numeric"
+            placeholder="Data de Nascimento"
+            onChangeText={telaDataNascimento}
+            style={style.input}
+          />
+          {errors.dataNascimento && (
+            <Text style={style.error}>{errors.dataNascimento}</Text>
+          )}
+
+          <TouchableOpacity
+            style={style.btnsalvar}
+            onPress={telaCadastrarCrianca}
+          >
+            <Text
+              style={{
+                color: "#FFFFFF",
+                fontSize: 25,
+                textAlign: "center",
+              }}
+            >
+              Salvar
+            </Text>
+          </TouchableOpacity>
+          <Text style={style.cadtexto}>{message}</Text>
+        </View>
+        <View style={style.viewbtn}>
+          <TouchableOpacity
+            style={[style.btnListar, style.btnav]}
+            onPress={() =>
+              navigation.navigate("Homestack", { screen: "Inicio" })
+            }
+          >
+            <FontAwesome5 name="home" size={40} color="#FFFFFF" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[style.btnListar, style.btnav]}
+            onPress={telaCadastrarCrianca}
+          >
+            <FontAwesome5 name="save" size={40} color="#FFFFFF" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[style.btnListar, style.btnav]}
+            onPress={() =>
+              navigation.navigate("Homestack", { screen: "ListaCriancas" })
+            }
+          >
+            <FontAwesome5 name="users" size={40} color="#FFFFFF" />
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

@@ -15,7 +15,7 @@ export default function StackRoutes() {
           backgroundColor: "#26A20A",
         },
         headerTitleAlign: "center",
-        headerTitleStyle: { fontSize: 20, color: "red" },
+        headerTitleStyle: { fontSize: 22, color: "#FFFFFF" },
       }}
     >
       <Stack.Screen
@@ -25,7 +25,11 @@ export default function StackRoutes() {
       />
       <Stack.Screen name="Cadastro" component={Cadastro} />
       <Stack.Screen name="VerVacina" component={VerVacinas} />
-      <Stack.Screen name="TelaCrianca" component={TelaCrianca} />
+      <Stack.Screen
+        options={{ title: "Detalhes" }}
+        name="TelaCrianca"
+        component={TelaCrianca}
+      />
       <Stack.Screen name="AdicionarVacina" component={AdicionarVacina} />
     </Stack.Navigator>
   );

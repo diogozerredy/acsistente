@@ -29,18 +29,34 @@ export default function Home({ navigation }) {
             />
             <Text style={style.btntexto}>SISTEMATICA</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={[style.botao, style.cadastros]}>
+            <FontAwesome5
+              style={{ textAlign: "center" }}
+              name="file-alt"
+              size={60}
+              color="#26A20A"
+            />
+            <Text style={style.btntexto}>RELATORIOS</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[style.botao, style.cadastros]}>
+            <FontAwesome5
+              style={{ textAlign: "center" }}
+              name="info-circle"
+              size={60}
+              color="#26A20A"
+            />
+            <Text style={style.btntexto}>SOBRE</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={style.msg}>
-          TABALHO DE EXTENSAO ESTACIO{"\n"} REACT-NATIVE FEITO POR:{"\n"}{" "}
-          ANTONIO DIOGO AMARO DE LIMA
-          {"\n"} MATRICULA: 202204176181
-        </Text>
 
         <TouchableOpacity
           onPress={() => navigation.navigate("Cadastro")}
           style={[style.botao, style.btncadastrar]}
         >
-          <Text style={[style.texto, { fontSize: 17 }]}>CADASTRAR CRIANÇA</Text>
+          <FontAwesome5 name="user-plus" size={60} color="#FFFFFF" />
+          <Text style={[style.texto, { fontSize: 20 }]}>
+            CADASTRAR{"\n"}CRIANÇA
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
