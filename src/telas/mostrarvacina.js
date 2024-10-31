@@ -32,7 +32,7 @@ export default function VerVacinas({ route, navigation }) {
 
   const atualizarVacina = async (doseAtualizada) => {
     const novasVacinas = vacinas.map((vacina) =>
-      vacina.nome === doseAtualizada.nome ? doseAtualizada : vacina
+      vacina.id === doseAtualizada.id ? doseAtualizada : vacina
     );
 
     setVacinas(novasVacinas);
@@ -85,8 +85,8 @@ export default function VerVacinas({ route, navigation }) {
   const gruposVacinas = agruparVacinasPorIdadeEDose(vacinas);
 
   return (
-    <SafeAreaView style={style.container}>
-      <ScrollView>
+    <SafeAreaView style={[style.container, { paddingBottom: 30 }]}>
+      <ScrollView style={{}}>
         {Object.keys(gruposVacinas).length > 0 ? (
           Object.keys(gruposVacinas).map((chave) => {
             const [idade, dose] = chave.split(" - ");
@@ -95,9 +95,7 @@ export default function VerVacinas({ route, navigation }) {
             );
             return (
               <View key={chave}>
-                <Text
-                  style={{ fontSize: 18, fontWeight: "bold", marginTop: 20 }}
-                >
+                <Text style={style.idadevcn}>
                   Vacina {idadeFormatada} - {dose}
                 </Text>
                 {gruposVacinas[chave].map((vacina, index) => (
@@ -108,21 +106,51 @@ export default function VerVacinas({ route, navigation }) {
                         vacina: vacina,
                       });
                     }}
-                    style={{
-                      justifyContent: "center",
-                      alignContent: "center",
-                      backgroundColor: "#ffffff",
-                      width: "95%",
-                      marginTop: 15,
-                      marginHorizontal: "2%",
-                      borderRadius: 5,
-                    }}
+                    style={style.tabvcn}
                   >
-                    <Text style={{ textAlign: "center" }}>{vacina.nome}</Text>
-                    <Text>Data: {vacina.data}</Text>
-                    <Text>Local: {vacina.local}</Text>
-                    <Text>Lote: {vacina.lote}</Text>
-                    <Text>Técnico: {vacina.tecnico}</Text>
+                    <View style={{ borderWidth: 1, gap: 5, padding: 5 }}>
+                      <Text style={style.titlevcn}>{vacina.nome}</Text>
+                      <Text style={style.descvcn}>
+                        Data:{" "}
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {vacina.data}
+                        </Text>
+                      </Text>
+                      <Text style={style.descvcn}>
+                        Local:{" "}
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {vacina.local}
+                        </Text>
+                      </Text>
+                      <Text style={style.descvcn}>
+                        Lote:{" "}
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {vacina.lote}
+                        </Text>
+                      </Text>
+                      <Text style={style.descvcn}>
+                        Técnico:{" "}
+                        <Text
+                          style={{
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {vacina.tecnico}
+                        </Text>
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>

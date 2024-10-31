@@ -16,33 +16,33 @@ export default function Cadastro({ navigation }) {
   const [message, setMessage] = useState("");
   const [errors, setErrors] = useState({});
   const [Todasvacinas] = useState([
-    new Vacina("BCG", "DoseUnica", "Ao Nascer"),
-    new Vacina("Hepatite B", "DoseUnica", "Ao Nascer"),
-    new Vacina("Penta", "Dose1", 2),
-    new Vacina("VIP", "Dose1", 2),
-    new Vacina("Rotavírus humano", "Dose1", 2),
-    new Vacina("Pneumocócica 10V", "Dose1", 2),
-    new Vacina("Meningocócica C", "Dose1", 3),
-    new Vacina("Penta", "Dose2", 4),
-    new Vacina("VIP", "Dose2", 4),
-    new Vacina("Rotavírus humano", "Dose2", 4),
-    new Vacina("Pneumocócica 10V", "Dose2", 4),
-    new Vacina("Meningocócica C", "Dose2", 5),
-    new Vacina("Penta", "Dose3", 6),
-    new Vacina("VIP", "Dose3", 6),
-    new Vacina("Febre Amarela", "Dose1", 9),
-    new Vacina("Pneumocócica 10V", "Reforço", 12),
-    new Vacina("Meningocócica C", "Reforço", 12),
-    new Vacina("Tríplice viral", "Dose1", 12),
-    new Vacina("Tríplice viral", "Dose2", 15),
-    new Vacina("DTP", "1°Reforço", 15),
-    new Vacina("VOP", "1°Reforço", 15),
-    new Vacina("Hepatite A", "UmaDose", 15),
-    new Vacina("Treta Viral", "UmaDose", 15),
-    new Vacina("DTP", "2°Reforço", 48),
-    new Vacina("VOP", "2°Reforço", 48),
-    new Vacina("Febre Amarela", "Dose1", 48),
-    new Vacina("Varicela", "UmaDose", 48),
+    new Vacina("BCG", "DoseUnica", "Ao Nascer", "BCG_DoseUnica"),
+    new Vacina("Hepatite B", "DoseUnica", "Ao Nascer", "HepatiteB_DoseUnica"),
+    new Vacina("Penta", "Dose1", 2, "Penta_Dose1"),
+    new Vacina("VIP", "Dose1", 2, "VIP_Dose1"),
+    new Vacina("Rotavírus humano", "Dose1", 2, "RotavirusHumano_Dose1"),
+    new Vacina("Pneumocócica 10V", "Dose1", 2, "Pneumococica10V_Dose1"),
+    new Vacina("Meningocócica C", "Dose1", 3, "MeningococicaC_Dose1"),
+    new Vacina("Penta", "Dose2", 4, "Penta_Dose2"),
+    new Vacina("VIP", "Dose2", 4, "VIP_Dose2"),
+    new Vacina("Rotavírus humano", "Dose2", 4, "RotavirusHumano_Dose2"),
+    new Vacina("Pneumocócica 10V", "Dose2", 4, "Pneumococica10V_Dose2"),
+    new Vacina("Meningocócica C", "Dose2", 5, "MeningococicaC_Dose2"),
+    new Vacina("Penta", "Dose3", 6, "Penta_Dose3"),
+    new Vacina("VIP", "Dose3", 6, "VIP_Dose3"),
+    new Vacina("Febre Amarela", "Dose1", 9, "FebreAmarela_Dose1"),
+    new Vacina("Pneumocócica 10V", "Reforço", 12, "Pneumococica10V_Reforco"),
+    new Vacina("Meningocócica C", "Reforço", 12, "MeningococicaC_Reforco"),
+    new Vacina("Tríplice viral", "Dose1", 12, "TripliceViral_Dose1"),
+    new Vacina("Tríplice viral", "Dose2", 15, "TripliceViral_Dose2"),
+    new Vacina("DTP", "1°Reforço", 15, "DTP_1Reforco"),
+    new Vacina("VOP", "1°Reforço", 15, "VOP_1Reforco"),
+    new Vacina("Hepatite A", "UmaDose", 15, "HepatiteA_UmaDose"),
+    new Vacina("Treta Viral", "UmaDose", 15, "TretaViral_UmaDose"),
+    new Vacina("DTP", "2°Reforço", 48, "DTP_2Reforco"),
+    new Vacina("VOP", "2°Reforço", 48, "VOP_2Reforco"),
+    new Vacina("Febre Amarela", "Dose1", 48, "FebreAmarela_Dose1_48"),
+    new Vacina("Varicela", "UmaDose", 48, "Varicela_UmaDose"),
   ]);
 
   const telaCadastrarCrianca = async () => {
@@ -154,6 +154,9 @@ export default function Cadastro({ navigation }) {
             <Text style={style.error}>{errors.dataNascimento}</Text>
           )}
 
+          <Text style={style.cadtexto}>{message}</Text>
+        </View>
+        <View style={{ justifyContent: "flex-start", flex: 1, marginTop: 10 }}>
           <TouchableOpacity
             style={style.btnsalvar}
             onPress={telaCadastrarCrianca}
@@ -168,7 +171,6 @@ export default function Cadastro({ navigation }) {
               Salvar
             </Text>
           </TouchableOpacity>
-          <Text style={style.cadtexto}>{message}</Text>
         </View>
         <View style={style.viewbtn}>
           <TouchableOpacity

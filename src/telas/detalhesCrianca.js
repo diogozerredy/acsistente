@@ -10,8 +10,10 @@ import {
 import { CriancaContext } from "../routes/CriancaContext";
 import style from "../../style/style";
 import { SafeAreaView } from "react-native-safe-area-context";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
+import { set } from "date-fns";
 
 export default function TelaCrianca({ route, navigation }) {
   const { crianca } = route.params || {};
@@ -29,6 +31,7 @@ export default function TelaCrianca({ route, navigation }) {
   const [editarDn, setEditarDn] = useState(false);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [mostrarEditar, setMostrarEdita] = useState(false);
 
   const [valorNomeOriginal, setValorNomeOriginal] = useState(
     crianca.nomeCrianca
@@ -58,6 +61,7 @@ export default function TelaCrianca({ route, navigation }) {
     setEditarNome(false);
     setEditarMae(false);
     setEditarDn(false);
+    setMostrarEdita(false);
   };
 
   const telaDataNascimento = (value) => {
@@ -154,133 +158,178 @@ export default function TelaCrianca({ route, navigation }) {
         </View>
       </Modal>
 
-      <View style={[style.content, style.detalhes]}>
-        {editarNome ? (
-          <View>
-            <View style={style.vieweditarinput}>
-              <TextInput
-                style={style.editarinput}
-                placeholder="Nome da Criança"
-                value={nomeCrianca}
-                onChangeText={setNomeCrianca}
-              />
-              <View style={style.confirmar}>
-                <TouchableOpacity onPress={() => cancelarEdicao("nome")}>
-                  <Feather name="x" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={SalvarCrianca}>
-                  <Feather name="check" size={24} color="black" />
+      <View style={style.detalhes}>
+        {mostrarEditar ? (
+          <View style={[style.content, { padding: 20 }]}>
+            {editarNome ? (
+              <View>
+                <View style={style.vieweditarinput}>
+                  <TextInput
+                    style={style.editarinput}
+                    placeholder="Nome da Criança"
+                    value={nomeCrianca}
+                    onChangeText={setNomeCrianca}
+                  />
+                  <View style={style.confirmar}>
+                    <TouchableOpacity onPress={() => cancelarEdicao("nome")}>
+                      <Feather name="x" size={24} color="red" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={SalvarCrianca}>
+                      <Feather name="check" size={24} color="#26A20A" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {errors.nomeCrianca && (
+                  <Text style={style.error}>{errors.nomeCrianca}</Text>
+                )}
+              </View>
+            ) : (
+              <View style={style.vieweditarinput}>
+                <Text>{nomeCrianca}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setValorNomeOriginal(nomeCrianca);
+                    setEditarNome(true);
+                    cancelarEdicao("dn");
+                    setEditarDn(false);
+                    cancelarEdicao("mae");
+                    setEditarMae(false);
+                  }}
+                >
+                  <FontAwesome5 name="edit" size={24} color="#00008b" />
                 </TouchableOpacity>
               </View>
-            </View>
-            {errors.nomeCrianca && (
-              <Text style={style.error}>{errors.nomeCrianca}</Text>
             )}
+            {editarMae ? (
+              <View>
+                <View style={style.vieweditarinput}>
+                  <TextInput
+                    style={style.editarinput}
+                    placeholder="Nome da Mãe"
+                    value={nomeMae}
+                    onChangeText={setNomeMae}
+                  />
+                  <View style={style.confirmar}>
+                    <TouchableOpacity onPress={() => cancelarEdicao("mae")}>
+                      <Feather name="x" size={24} color="red" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={SalvarCrianca}>
+                      <Feather name="check" size={24} color="#26A20A" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {errors.nomeMae && (
+                  <Text style={style.error}>{errors.nomeMae}</Text>
+                )}
+              </View>
+            ) : (
+              <View style={style.vieweditarinput}>
+                <Text>{nomeMae}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setValorMaeOriginal(nomeMae);
+                    setEditarMae(true);
+                    cancelarEdicao("nome");
+                    setEditarNome(false);
+                    cancelarEdicao("dn");
+                    setEditarDn(false);
+                  }}
+                >
+                  <FontAwesome5 name="edit" size={24} color="#00008b" />
+                </TouchableOpacity>
+              </View>
+            )}
+            {editarDn ? (
+              <View>
+                <View style={style.vieweditarinput}>
+                  <TextInput
+                    style={style.editarinput}
+                    maxLength={10}
+                    placeholder="Data de Nascimento"
+                    keyboardType="numeric"
+                    value={dataNascimento}
+                    onChangeText={telaDataNascimento}
+                  />
+                  <View style={style.confirmar}>
+                    <TouchableOpacity onPress={() => cancelarEdicao("dn")}>
+                      <Feather name="x" size={24} color="red" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={SalvarCrianca}>
+                      <Feather name="check" size={24} color="#26A20A" />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                {errors.dataNascimento && (
+                  <Text style={style.error}>{errors.dataNascimento}</Text>
+                )}
+              </View>
+            ) : (
+              <View style={style.vieweditarinput}>
+                <Text>{dataNascimento}</Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setValorDnOriginal(dataNascimento);
+                    setEditarDn(true);
+                    cancelarEdicao("nome");
+                    setEditarNome(false);
+                    cancelarEdicao("mae");
+                    setEditarMae(false);
+                  }}
+                >
+                  <FontAwesome5 name="edit" size={24} color="#00008b" />
+                </TouchableOpacity>
+              </View>
+            )}
+            <TouchableOpacity style={style.btnsalvar} onPress={SalvarCrianca}>
+              <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: 25,
+                  textAlign: "center",
+                }}
+              >
+                Salvar
+              </Text>
+            </TouchableOpacity>
           </View>
         ) : (
-          <View style={style.vieweditarinput}>
-            <Text>{nomeCrianca}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setValorNomeOriginal(nomeCrianca);
-                setEditarNome(true);
-                cancelarEdicao("dn");
-                setEditarDn(false);
-                cancelarEdicao("mae");
-                setEditarMae(false);
-              }}
-            >
-              <AntDesign name="edit" size={24} color="black" />
+          <View>
+            <TouchableOpacity>
+              <Text>Adicionar vacina</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setMostrarEdita(true)}>
+              <Text>editar crianca</Text>
             </TouchableOpacity>
           </View>
         )}
-        {editarMae ? (
-          <View>
-            <View style={style.vieweditarinput}>
-              <TextInput
-                style={style.editarinput}
-                placeholder="Nome da Mãe"
-                value={nomeMae}
-                onChangeText={setNomeMae}
-              />
-              <View style={style.confirmar}>
-                <TouchableOpacity onPress={() => cancelarEdicao("mae")}>
-                  <Feather name="x" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={SalvarCrianca}>
-                  <Feather name="check" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {errors.nomeMae && (
-              <Text style={style.error}>{errors.nomeMae}</Text>
-            )}
-          </View>
-        ) : (
-          <View style={style.vieweditarinput}>
-            <Text>{nomeMae}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setValorMaeOriginal(nomeMae);
-                setEditarMae(true);
-                cancelarEdicao("nome");
-                setEditarNome(false);
-                cancelarEdicao("dn");
-                setEditarDn(false);
-              }}
-            >
-              <AntDesign name="edit" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        )}
-        {editarDn ? (
-          <View>
-            <View style={style.vieweditarinput}>
-              <TextInput
-                style={style.editarinput}
-                maxLength={10}
-                placeholder="Data de Nascimento"
-                keyboardType="numeric"
-                value={dataNascimento}
-                onChangeText={telaDataNascimento}
-              />
-              <View style={style.confirmar}>
-                <TouchableOpacity onPress={() => cancelarEdicao("dn")}>
-                  <Feather name="x" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={SalvarCrianca}>
-                  <Feather name="check" size={24} color="black" />
-                </TouchableOpacity>
-              </View>
-            </View>
-            {errors.dataNascimento && (
-              <Text style={style.error}>{errors.dataNascimento}</Text>
-            )}
-          </View>
-        ) : (
-          <View style={style.vieweditarinput}>
-            <Text>{dataNascimento}</Text>
-            <TouchableOpacity
-              onPress={() => {
-                setValorDnOriginal(dataNascimento);
-                setEditarDn(true);
-                cancelarEdicao("nome");
-                setEditarNome(false);
-                cancelarEdicao("mae");
-                setEditarMae(false);
-              }}
-            >
-              <AntDesign name="edit" size={24} color="black" />
-            </TouchableOpacity>
-          </View>
-        )}
-
-        <Button title="Salvar" onPress={SalvarCrianca} />
-        <Button title="Remover" onPress={() => setModalVisible(true)} />
-        <Button
-          title="VACINAS"
-          onPress={() => navigation.navigate("VerVacina", { crianca: crianca })}
-        />
+        <View style={style.btnsave}></View>
+        <View style={style.btnsdetalhes}>
+          <TouchableOpacity
+            style={style.btndetalhes}
+            onPress={() =>
+              navigation.navigate("Homestack", { screen: "Inicio" })
+            }
+          >
+            <FontAwesome5 name="home" size={40} color="#FFFFFF" />
+            <Text style={style.dtlhsText}>Inicio</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={style.btndetalhes}
+            onPress={() => setModalVisible(true)}
+          >
+            <FontAwesome5 name="trash-alt" size={40} color="#FFF" />
+            <Text style={style.dtlhsText}>Remover</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={style.btndetalhes}
+            onPress={() =>
+              navigation.navigate("VerVacina", { crianca: crianca })
+            }
+          >
+            <MaterialIcons name="vaccines" size={40} color="#FFF" />
+            <Text style={style.dtlhsText}>Vacinas</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );

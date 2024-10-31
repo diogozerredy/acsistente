@@ -53,7 +53,7 @@ export default function Home({ navigation }) {
           onPress={() => navigation.navigate("Cadastro")}
           style={[style.botao, style.btncadastrar]}
         >
-          <FontAwesome5 name="user-plus" size={60} color="#FFFFFF" />
+          <FontAwesome5 name="user-plus" size={60} color="#26A20A" />
           <Text style={[style.texto, { fontSize: 20 }]}>
             CADASTRAR{"\n"}CRIANÇA
           </Text>

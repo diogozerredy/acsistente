@@ -20,7 +20,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   texto: {
-    color: "#FFFFFF",
+    color: "#26A20A",
     textAlign: "center",
     fontFamily: "Lato_400Regular",
   },
@@ -48,7 +48,7 @@ export default StyleSheet.create({
     bottom: 15,
     width: "90%",
     padding: 20,
-    backgroundColor: "#26A20A",
+    backgroundColor: "#fff",
     gap: 20,
     borderRadius: 8,
   },
@@ -94,7 +94,12 @@ export default StyleSheet.create({
     backgroundColor: "#26A20A",
   },
   // CADASTRO
-  viewinput: { padding: 7, height: "100%", justifyContent: "space-between" },
+  viewinput: {
+    padding: 7,
+    height: "100%",
+    justifyContent: "space-between",
+    flex: 1,
+  },
   input: {
     width: "100%",
     borderWidth: 0.7,
@@ -108,7 +113,6 @@ export default StyleSheet.create({
     width: "90%",
     height: 65,
     backgroundColor: "#26A20A",
-    marginTop: 20,
     justifyContent: "center",
     marginHorizontal: "5%",
   },
@@ -128,8 +132,6 @@ export default StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
-  //tela criancas
-  detalhes: { padding: 20 },
   //erros
   error: {
     marginStart: 10,
@@ -138,7 +140,12 @@ export default StyleSheet.create({
     color: "red",
   },
   //DetalhesCriancas
+  detalhes: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
   vieweditarinput: {
+    borderColor: "#26A20A",
     borderWidth: 1,
     borderRadius: 25,
     padding: 10,
@@ -147,6 +154,53 @@ export default StyleSheet.create({
   },
   confirmar: { flexDirection: "row", gap: 10 },
   editarinput: { width: "80%" },
+  btnsdetalhes: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
+  btndetalhes: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#26A20A",
+    borderRadius: 50,
+    width: 80,
+    height: 80,
+    marginBottom: 50,
+  },
+  btnsave: {
+    alignItems: "flex-end",
+    marginBottom: "10%",
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  dtlhsText: { color: "#FFF" },
+  // VACINAS
+  idadevcn: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginTop: 20,
+    textAlign: "center",
+  },
+  titlevcn: {
+    textAlign: "center",
+    fontWeight: "bold",
+    padding: 3,
+    backgroundColor: "#00008b",
+    color: "#FFF",
+    fontSize: 16,
+  },
+  tabvcn: {
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "#ffffff",
+    width: "80%",
+    marginTop: 15,
+    marginHorizontal: "10%",
+    borderRadius: 5,
+  },
+  descvcn: { fontSize: 16 },
+
+  addInput: { borderBottomWidth: 0.5, height: 35 },
   //modal
   centeredView: {
     flex: 1,
@@ -177,7 +231,7 @@ export default StyleSheet.create({
   },
   button: {
     borderRadius: 20,
-    padding: 5,
+    padding: 9,
     elevation: 2,
     backgroundColor: "#26A20A",
   },

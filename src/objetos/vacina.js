@@ -1,6 +1,6 @@
 class Vacina {
-  constructor(nome, dose, idade) {
-    this.id = 0;
+  constructor(nome, dose, idade, id) {
+    this.id = id || `${nome}_${dose}`;
     this.nome = nome;
     this.dose = dose;
     this.idade = idade;
