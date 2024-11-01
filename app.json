@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "agentedesaude",
-    "slug": "agentedesaude",
+    "slug": "acsistente",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,12 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "02486047-0527-45e5-98bf-45acdd915eb3"
+      }
+    },
+    "owner": "diogoamaro"
   }
 }

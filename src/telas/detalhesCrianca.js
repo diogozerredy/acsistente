@@ -281,24 +281,31 @@ export default function TelaCrianca({ route, navigation }) {
               </View>
             )}
             <TouchableOpacity style={style.btnsalvar} onPress={SalvarCrianca}>
-              <Text
-                style={{
-                  color: "#FFFFFF",
-                  fontSize: 25,
-                  textAlign: "center",
-                }}
-              >
-                Salvar
-              </Text>
+              <Text style={style.textbtn}>Salvar</Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View>
-            <TouchableOpacity>
-              <Text>Adicionar vacina</Text>
+          <View style={{ gap: 20, alignItems: "center" }}>
+            <Text style={[style.textoLista, { fontSize: 20, width: "80%" }]}>
+              Nome:
+              <Text style={{ fontWeight: "bold" }}> {crianca.nomeCrianca}</Text>
+              {"\n"}
+              Mae: {crianca.nomeMae} {"\n"}
+              Dn: {crianca.dataNascimento}
+            </Text>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("VerVacina", { crianca: crianca })
+              }
+              style={style.btnsalvar}
+            >
+              <Text style={style.textbtn}>Adicionar Vacina</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setMostrarEdita(true)}>
-              <Text>editar crianca</Text>
+            <TouchableOpacity
+              style={style.btnsalvar}
+              onPress={() => setMostrarEdita(true)}
+            >
+              <Text style={style.textbtn}>Editar Crianca</Text>
             </TouchableOpacity>
           </View>
         )}

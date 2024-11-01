@@ -174,6 +174,11 @@ export default StyleSheet.create({
     justifyContent: "flex-end",
   },
   dtlhsText: { color: "#FFF" },
+  textbtn: {
+    color: "#FFFFFF",
+    fontSize: 25,
+    textAlign: "center",
+  },
   // VACINAS
   idadevcn: {
     fontSize: 18,
