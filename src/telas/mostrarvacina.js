@@ -102,7 +102,7 @@ export default function VerVacinas({ route, navigation }) {
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      navigation.navigate("AdicionarVacina", {
+                      navigation.navigate("AdicionarDose", {
                         vacina: vacina,
                       });
                     }}

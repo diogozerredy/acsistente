@@ -32,6 +32,7 @@ export default function TelaCrianca({ route, navigation }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [mostrarEditar, setMostrarEdita] = useState(false);
+  const [btnmostrar, setbtnmostrar] = useState(true);
 
   const [valorNomeOriginal, setValorNomeOriginal] = useState(
     crianca.nomeCrianca
@@ -53,15 +54,16 @@ export default function TelaCrianca({ route, navigation }) {
     }
   };
   const SalvarCrianca = () => {
+    atualizarCrianca({ ...crianca, nomeCrianca, dataNascimento, nomeMae });
+    navigation.goBack();
+  };
+  const Salvarinput = () => {
     if (!validarInput()) {
       return;
     }
-
-    atualizarCrianca({ ...crianca, nomeCrianca, dataNascimento, nomeMae });
     setEditarNome(false);
     setEditarMae(false);
     setEditarDn(false);
-    setMostrarEdita(false);
   };
 
   const telaDataNascimento = (value) => {
@@ -140,7 +142,9 @@ export default function TelaCrianca({ route, navigation }) {
             <View style={style.btnview}>
               <TouchableOpacity
                 style={style.button}
-                onPress={() => setModalVisible(false)}
+                onPress={() => {
+                  setModalVisible(false);
+                }}
               >
                 <Text style={style.textStyle}>Cancelar</Text>
               </TouchableOpacity>
@@ -174,7 +178,7 @@ export default function TelaCrianca({ route, navigation }) {
                     <TouchableOpacity onPress={() => cancelarEdicao("nome")}>
                       <Feather name="x" size={24} color="red" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={SalvarCrianca}>
+                    <TouchableOpacity onPress={Salvarinput}>
                       <Feather name="check" size={24} color="#26A20A" />
                     </TouchableOpacity>
                   </View>
@@ -190,9 +194,8 @@ export default function TelaCrianca({ route, navigation }) {
                   onPress={() => {
                     setValorNomeOriginal(nomeCrianca);
                     setEditarNome(true);
-                    cancelarEdicao("dn");
                     setEditarDn(false);
-                    cancelarEdicao("mae");
+
                     setEditarMae(false);
                   }}
                 >
@@ -213,7 +216,7 @@ export default function TelaCrianca({ route, navigation }) {
                     <TouchableOpacity onPress={() => cancelarEdicao("mae")}>
                       <Feather name="x" size={24} color="red" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={SalvarCrianca}>
+                    <TouchableOpacity onPress={Salvarinput}>
                       <Feather name="check" size={24} color="#26A20A" />
                     </TouchableOpacity>
                   </View>
@@ -229,9 +232,9 @@ export default function TelaCrianca({ route, navigation }) {
                   onPress={() => {
                     setValorMaeOriginal(nomeMae);
                     setEditarMae(true);
-                    cancelarEdicao("nome");
+
                     setEditarNome(false);
-                    cancelarEdicao("dn");
+
                     setEditarDn(false);
                   }}
                 >
@@ -254,7 +257,7 @@ export default function TelaCrianca({ route, navigation }) {
                     <TouchableOpacity onPress={() => cancelarEdicao("dn")}>
                       <Feather name="x" size={24} color="red" />
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={SalvarCrianca}>
+                    <TouchableOpacity onPress={Salvarinput}>
                       <Feather name="check" size={24} color="#26A20A" />
                     </TouchableOpacity>
                   </View>
@@ -270,9 +273,7 @@ export default function TelaCrianca({ route, navigation }) {
                   onPress={() => {
                     setValorDnOriginal(dataNascimento);
                     setEditarDn(true);
-                    cancelarEdicao("nome");
                     setEditarNome(false);
-                    cancelarEdicao("mae");
                     setEditarMae(false);
                   }}
                 >
@@ -280,7 +281,25 @@ export default function TelaCrianca({ route, navigation }) {
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity style={style.btnsalvar} onPress={SalvarCrianca}>
+            <TouchableOpacity
+              style={style.btnretangular}
+              onPress={() => {
+                setEditarNome(false);
+                setEditarMae(false);
+                setEditarDn(false);
+                setMostrarEdita(false);
+                setbtnmostrar(true);
+                cancelarEdicao("nome");
+                cancelarEdicao("dn");
+                cancelarEdicao("mae");
+              }}
+            >
+              <Text style={style.textbtn}>cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={style.btnretangular}
+              onPress={SalvarCrianca}
+            >
               <Text style={style.textbtn}>Salvar</Text>
             </TouchableOpacity>
           </View>
@@ -289,27 +308,39 @@ export default function TelaCrianca({ route, navigation }) {
             <Text style={[style.textoLista, { fontSize: 20, width: "80%" }]}>
               Nome:
               <Text style={{ fontWeight: "bold" }}> {crianca.nomeCrianca}</Text>
-              {"\n"}
-              Mae: {crianca.nomeMae} {"\n"}
-              Dn: {crianca.dataNascimento}
             </Text>
+          </View>
+        )}
+
+        {btnmostrar && (
+          <View style={{ width: "100%", gap: 20 }}>
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("VerVacina", { crianca: crianca })
               }
-              style={style.btnsalvar}
+              style={style.btnretangular}
             >
               <Text style={style.textbtn}>Adicionar Vacina</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={style.btnsalvar}
-              onPress={() => setMostrarEdita(true)}
+              onPress={() =>
+                navigation.navigate("VerPesos", { crianca: crianca })
+              }
+              style={style.btnretangular}
+            >
+              <Text style={style.textbtn}>Adicionar Peso</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={style.btnretangular}
+              onPress={() => {
+                setbtnmostrar(false);
+                setMostrarEdita(true);
+              }}
             >
               <Text style={style.textbtn}>Editar Crianca</Text>
             </TouchableOpacity>
           </View>
         )}
-        <View style={style.btnsave}></View>
         <View style={style.btnsdetalhes}>
           <TouchableOpacity
             style={style.btndetalhes}

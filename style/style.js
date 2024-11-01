@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   //HOME
   Home: {
-    gap: 30,
+    justifyContent: "center",
   },
   container: {
     backgroundColor: "#f0f0f0",
@@ -11,12 +11,12 @@ export default StyleSheet.create({
   },
 
   content: {
-    gap: 15,
+    gap: 20,
     backgroundColor: "#f0f0f0",
   },
   contenthome: {
+    gap: 20,
     flexDirection: "row",
-    flexWrap: "wrap",
     justifyContent: "center",
   },
   texto: {
@@ -43,10 +43,8 @@ export default StyleSheet.create({
   btncadastrar: {
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    right: 21,
-    bottom: 15,
     width: "90%",
+    height: 170,
     padding: 20,
     backgroundColor: "#fff",
     gap: 20,
@@ -54,7 +52,7 @@ export default StyleSheet.create({
   },
   cadastros: {
     borderRadius: 10,
-    width: 170,
+    width: "42%",
     height: 170,
   },
   msg: {
@@ -108,8 +106,8 @@ export default StyleSheet.create({
     borderRadius: 25,
     borderColor: "#26A20A",
   },
-  btnsalvar: {
-    borderRadius: 100,
+  btnretangular: {
+    borderRadius: 10,
     width: "90%",
     height: 65,
     backgroundColor: "#26A20A",
@@ -155,6 +153,7 @@ export default StyleSheet.create({
   confirmar: { flexDirection: "row", gap: 10 },
   editarinput: { width: "80%" },
   btnsdetalhes: {
+    width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly",
   },
@@ -206,6 +205,39 @@ export default StyleSheet.create({
   descvcn: { fontSize: 16 },
 
   addInput: { borderBottomWidth: 0.5, height: 35 },
+  // pesos
+  title: { fontSize: 20, fontWeight: "bold", marginBottom: 20 },
+  pesoItem: { padding: 10, borderBottomWidth: 1, borderColor: "#DDD" },
+  pesoText: { fontSize: 16 },
+  noDataText: {
+    fontSize: 16,
+    color: "gray",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  addButton: {
+    padding: 15,
+    backgroundColor: "#4CAF50",
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  addButtonText: { color: "#FFF", fontSize: 16, fontWeight: "bold" },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    width: "80%",
+    padding: 20,
+    backgroundColor: "#FFF",
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 15 },
+
   //modal
   centeredView: {
     flex: 1,

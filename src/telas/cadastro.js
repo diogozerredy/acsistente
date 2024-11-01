@@ -158,7 +158,7 @@ export default function Cadastro({ navigation }) {
         </View>
         <View style={{ justifyContent: "flex-start", flex: 1, marginTop: 10 }}>
           <TouchableOpacity
-            style={style.btnsalvar}
+            style={style.btnretangular}
             onPress={telaCadastrarCrianca}
           >
             <Text

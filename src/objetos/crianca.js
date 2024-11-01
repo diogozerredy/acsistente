@@ -5,7 +5,7 @@ export default class Crianca {
     this.dataNascimento = dataNascimento;
     this.nomeMae = mae;
     this.idade;
-
+    this.pesos = [];
     this.vacinas = []; // Inicializa a lista de vacinas
   }
 }
