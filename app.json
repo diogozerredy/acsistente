@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "agentedesaude",
+    "name": "ACSistente",
     "slug": "acsistente",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#26A20A"
     },
     "ios": {
       "supportsTablet": true
@@ -17,9 +17,9 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#26A20A"
       },
-      "package": "com.anonymous.agentedesaude"
+      "package": "com.app.acsistente"
     },
     "web": {
       "favicon": "./assets/favicon.png"

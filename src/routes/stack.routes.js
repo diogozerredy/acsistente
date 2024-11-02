@@ -5,6 +5,7 @@ import Cadastro from "../telas/cadastro.js";
 import TabRoutes from "./tab.routes.js";
 import DetalhesCrianca from "../telas/detalhesCrianca.js";
 import AdicionarPeso from "../telas/pesos.js";
+import Sobre from "../telas/Sobre.js";
 const Stack = createNativeStackNavigator();
 
 export default function StackRoutes() {
@@ -32,7 +33,12 @@ export default function StackRoutes() {
       />
       <Stack.Screen name="Detalhes" component={DetalhesCrianca} />
       <Stack.Screen name="AdicionarDose" component={AdicionarVacina} />
-      <Stack.Screen name="VerPesos" component={AdicionarPeso} />
+      <Stack.Screen
+        options={{ title: "Pesos" }}
+        name="VerPesos"
+        component={AdicionarPeso}
+      />
+      <Stack.Screen name="Sobre" component={Sobre} />
     </Stack.Navigator>
   );
 }

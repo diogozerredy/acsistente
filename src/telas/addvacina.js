@@ -50,6 +50,7 @@ export default function AdicionarVacina({ route, navigation }) {
         <TextInput
           style={style.addInput}
           placeholder="Data:"
+          keyboardType="numeric"
           value={data}
           onChangeText={setData}
         />

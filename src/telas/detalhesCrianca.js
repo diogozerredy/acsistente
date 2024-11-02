@@ -13,7 +13,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Feather from "@expo/vector-icons/Feather";
-import { set } from "date-fns";
 
 export default function TelaCrianca({ route, navigation }) {
   const { crianca } = route.params || {};
@@ -304,10 +303,24 @@ export default function TelaCrianca({ route, navigation }) {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{ gap: 20, alignItems: "center" }}>
-            <Text style={[style.textoLista, { fontSize: 20, width: "80%" }]}>
+          <View
+            style={{
+              alignItems: "center",
+              borderBottomWidth: 2,
+              paddingBottom: 25,
+              borderColor: "#CCC",
+            }}
+          >
+            <Text style={{ fontSize: 20, width: "80%", lineHeight: 30 }}>
               Nome:
               <Text style={{ fontWeight: "bold" }}> {crianca.nomeCrianca}</Text>
+              {"\n"}Mae:
+              <Text style={{ fontWeight: "bold" }}> {crianca.nomeMae}</Text>
+              {"\n"}Data Nascimento:
+              <Text style={{ fontWeight: "bold" }}>
+                {" "}
+                {crianca.dataNascimento}
+              </Text>
             </Text>
           </View>
         )}

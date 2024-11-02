@@ -156,7 +156,7 @@ export default function Cadastro({ navigation }) {
 
           <Text style={style.cadtexto}>{message}</Text>
         </View>
-        <View style={{ justifyContent: "flex-start", flex: 1, marginTop: 10 }}>
+        <View style={{ justifyContent: "flex-end", flex: 1 }}>
           <TouchableOpacity
             style={style.btnretangular}
             onPress={telaCadastrarCrianca}
@@ -174,26 +174,29 @@ export default function Cadastro({ navigation }) {
         </View>
         <View style={style.viewbtn}>
           <TouchableOpacity
-            style={[style.btnListar, style.btnav]}
+            style={style.btndetalhes}
             onPress={() =>
               navigation.navigate("Homestack", { screen: "Inicio" })
             }
           >
             <FontAwesome5 name="home" size={40} color="#FFFFFF" />
+            <Text style={style.dtlhsText}>Inicio</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[style.btnListar, style.btnav]}
+            style={style.btndetalhes}
             onPress={telaCadastrarCrianca}
           >
             <FontAwesome5 name="save" size={40} color="#FFFFFF" />
+            <Text style={style.dtlhsText}>Salvar</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[style.btnListar, style.btnav]}
+            style={style.btndetalhes}
             onPress={() =>
               navigation.navigate("Homestack", { screen: "ListaCriancas" })
             }
           >
-            <FontAwesome5 name="users" size={40} color="#FFFFFF" />
+            <FontAwesome5 name="users" size={35} color="#FFFFFF" />
+            <Text style={style.dtlhsText}>Cadastros</Text>
           </TouchableOpacity>
         </View>
       </View>

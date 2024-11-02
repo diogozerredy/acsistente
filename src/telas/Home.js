@@ -21,7 +21,10 @@ export default function Home({ navigation }) {
               />
               <Text style={style.btntexto}>CADASTROS</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[style.botao, style.cadastros]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Sobre")}
+              style={[style.botao, style.cadastros]}
+            >
               <FontAwesome5
                 style={{ textAlign: "center" }}
                 name="clipboard-list"
@@ -33,7 +36,10 @@ export default function Home({ navigation }) {
           </View>
 
           <View style={style.contenthome}>
-            <TouchableOpacity style={[style.botao, style.cadastros]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Sobre")}
+              style={[style.botao, style.cadastros]}
+            >
               <FontAwesome5
                 style={{ textAlign: "center" }}
                 name="file-alt"
@@ -42,7 +48,10 @@ export default function Home({ navigation }) {
               />
               <Text style={style.btntexto}>RELATORIOS</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[style.botao, style.cadastros]}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Sobre")}
+              style={[style.botao, style.cadastros]}
+            >
               <FontAwesome5
                 style={{ textAlign: "center" }}
                 name="info-circle"

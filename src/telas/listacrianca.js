@@ -137,7 +137,7 @@ export default function ListaCriancas({ navigation }) {
           onPress={() => navigation.navigate("Cadastro")}
           style={[
             style.botao,
-            style.btnListar,
+            style.btndetalhes,
             { right: 20, bottom: 20, position: "absolute" },
           ]}
         >

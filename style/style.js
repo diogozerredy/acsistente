@@ -43,12 +43,11 @@ export default StyleSheet.create({
   btncadastrar: {
     flexDirection: "row",
     alignItems: "center",
-    width: "90%",
+    width: "87%",
     height: 170,
-    padding: 20,
     backgroundColor: "#fff",
     gap: 20,
-    borderRadius: 8,
+    borderRadius: 10,
   },
   cadastros: {
     borderRadius: 10,
@@ -77,20 +76,13 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   nomeLista: { fontWeight: "bold", fontSize: 16 },
-  textoLista: { fontSize: 15, lineHeight: 20 },
+  textoLista: { fontSize: 15, lineHeight: 22 },
   apagar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
-  btnListar: {
-    alignItems: "center",
-    opacity: 0.9,
-    borderRadius: 75,
-    width: 60,
-    height: 60,
-    backgroundColor: "#26A20A",
-  },
+
   // CADASTRO
   viewinput: {
     padding: 7,
@@ -156,6 +148,7 @@ export default StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginBottom: 50,
   },
   btndetalhes: {
     justifyContent: "center",
@@ -164,7 +157,7 @@ export default StyleSheet.create({
     borderRadius: 50,
     width: 80,
     height: 80,
-    marginBottom: 50,
+    // marginBottom: 50,
   },
   btnsave: {
     alignItems: "flex-end",
@@ -206,23 +199,23 @@ export default StyleSheet.create({
 
   addInput: { borderBottomWidth: 0.5, height: 35 },
   // pesos
-  title: { fontSize: 20, fontWeight: "bold", marginBottom: 20 },
-  pesoItem: { padding: 10, borderBottomWidth: 1, borderColor: "#DDD" },
+  title: { fontSize: 20, fontWeight: "bold", marginBottom: 20, marginLeft: 20 },
+  pesoItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: "#DDD",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: 20,
+  },
   pesoText: { fontSize: 16 },
-  noDataText: {
+  pesoTexto: {
     fontSize: 16,
     color: "gray",
     textAlign: "center",
     marginTop: 20,
   },
-  addButton: {
-    padding: 15,
-    backgroundColor: "#4CAF50",
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  addButtonText: { color: "#FFF", fontSize: 16, fontWeight: "bold" },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
@@ -230,7 +223,7 @@ export default StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "80%",
+    width: "82%",
     padding: 20,
     backgroundColor: "#FFF",
     borderRadius: 10,
@@ -246,8 +239,8 @@ export default StyleSheet.create({
   },
   modalView: {
     justifyContent: "space-between",
-    width: "70%",
-    height: 200,
+    width: "90%",
+    height: "22%",
     margin: 20,
     backgroundColor: "#ffffff",
     borderRadius: 20,
@@ -264,21 +257,64 @@ export default StyleSheet.create({
   },
   btnview: {
     flexDirection: "row",
-    gap: 5,
+    gap: 15,
   },
   button: {
+    flex: 1,
     borderRadius: 20,
     padding: 9,
     elevation: 2,
     backgroundColor: "#26A20A",
   },
-  textStyle: {
-    fontSize: 12,
-    color: "#FFFFFF",
-    fontWeight: "bold",
-    textAlign: "center",
+  buttonPeso: {
+    borderRadius: 20,
+    padding: 9,
+    elevation: 2,
+    backgroundColor: "#26A20A",
   },
+  pesoModal: {
+    flexDirection: "row",
+    flexGrow: 1,
+    marginTop: 15,
+    gap: 10,
+  },
+
   modalText: {
     fontSize: 17,
+  },
+
+  containersobre: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f0f0f0",
+    padding: 20,
+  },
+  cardsobre: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    maxWidth: 600,
+    width: "100%",
+  },
+  titlesobre: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  paragrafosobre: {
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: "justify",
+  },
+  destaquesobre: {
+    color: "#26A20A",
+    fontWeight: "bold",
   },
 });
