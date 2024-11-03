@@ -102,7 +102,7 @@ export default function AdicionarVacina({ route, navigation }) {
           style={style.addInput}
           placeholder="Lote:"
           value={lote}
-          onChangeText={setLote}
+          onChangeText={(lote) => setLote(lote.toUpperCase())}
         />
         {errors.lote && <Text style={style.error}>{errors.lote}</Text>}
         <TextInput
