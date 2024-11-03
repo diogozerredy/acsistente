@@ -86,7 +86,7 @@ export default function VerVacinas({ route, navigation }) {
 
   return (
     <SafeAreaView style={[style.container, { paddingBottom: 30 }]}>
-      <ScrollView style={{}}>
+      <ScrollView>
         {Object.keys(gruposVacinas).length > 0 ? (
           Object.keys(gruposVacinas).map((chave) => {
             const [idade, dose] = chave.split(" - ");

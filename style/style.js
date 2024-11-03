@@ -3,10 +3,14 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   //HOME
   Home: {
-    justifyContent: "center",
-  },
-  container: {
+    justifyContent: "space-evenly",
+    maxHeight: "100%",
+
     backgroundColor: "#f0f0f0",
+  },
+
+  textStyle: { color: "#FFFFFF", textAlign: "center", fontSize: 16 },
+  container: {
     flex: 1,
   },
 
@@ -15,9 +19,13 @@ export default StyleSheet.create({
     backgroundColor: "#f0f0f0",
   },
   contenthome: {
+    flexGrow: 1,
+    height: "33%",
     gap: 20,
     flexDirection: "row",
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "blue",
   },
   texto: {
     color: "#26A20A",
@@ -44,7 +52,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "87%",
-    height: 170,
+    height: "70%",
     backgroundColor: "#fff",
     gap: 20,
     borderRadius: 10,
@@ -52,7 +60,7 @@ export default StyleSheet.create({
   cadastros: {
     borderRadius: 10,
     width: "42%",
-    height: 170,
+    height: "80%",
   },
   msg: {
     borderRadius: 15,
