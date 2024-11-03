@@ -16,24 +16,59 @@ export default function AdicionarVacina({ route, navigation }) {
   const [lote, setLote] = useState(vacina.lote || "");
   const [tecnico, setTecnico] = useState(vacina.tecnico || "");
   const [errors, setErrors] = useState({});
+  const telaData = (value) => {
+    const formatoData = value
+      .replace(/\D/g, "")
+      .replace(/(\d{2})(\d)/, "$1/$2")
+      .replace(/(\d{2})(\d)/, "$1/$2");
+    setData(formatoData);
+  };
+  const validarInput = () => {
+    let validar = true;
+    let novosErros = {};
 
-  const adicionarDose = () => {
-    let newErrors = {};
-
-    if (!data) newErrors.data = "Data é obrigatória";
-    if (!local) newErrors.local = "Local é obrigatório";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
+    if (!data) {
+      novosErros.data = "Campo Obrigatório*";
+      validar = false;
     } else {
-      const vacinaAtualizada = { ...vacina, data, local, lote, tecnico };
+      const partes = data.split("/");
+      const dia = parseInt(partes[0], 10);
+      const mes = parseInt(partes[1], 10) - 1;
+      const ano = parseInt(partes[2], 10);
+      const objetoData = new Date(ano, mes, dia);
 
-      navigation.navigate({
-        name: "VerVacina",
-        params: { doseAtualizada: vacinaAtualizada },
-        merge: true,
-      });
+      if (
+        objetoData.getFullYear() !== ano ||
+        objetoData.getMonth() !== mes ||
+        objetoData.getDate() !== dia
+      ) {
+        novosErros.data = "*Verifique se digitou a data corretamente";
+        validar = false;
+      } else if (objetoData.getTime() >= new Date().getTime()) {
+        novosErros.data = "*Você digitou uma data inválida";
+        validar = false;
+      }
+      if (!local) {
+        novosErros.local = "Campo Obrigatório*";
+        validar = false;
+      }
+      if (!lote) {
+        novosErros.lote = "Campo Obrigatório*";
+        validar = false;
+      }
+
+      setErrors(novosErros);
+      return validar;
     }
+  };
+  const adicionarDose = () => {
+    if (!validarInput()) return;
+    const vacinaAtualizada = { ...vacina, data, local, lote, tecnico };
+    navigation.navigate({
+      name: "VerVacina",
+      params: { doseAtualizada: vacinaAtualizada },
+      merge: true,
+    });
   };
 
   return (
@@ -52,7 +87,8 @@ export default function AdicionarVacina({ route, navigation }) {
           placeholder="Data:"
           keyboardType="numeric"
           value={data}
-          onChangeText={setData}
+          maxLength={10}
+          onChangeText={telaData}
         />
         {errors.data && <Text style={style.error}>{errors.data}</Text>}
         <TextInput
@@ -68,6 +104,7 @@ export default function AdicionarVacina({ route, navigation }) {
           value={lote}
           onChangeText={setLote}
         />
+        {errors.lote && <Text style={style.error}>{errors.lote}</Text>}
         <TextInput
           style={style.addInput}
           placeholder="Técnico:"
@@ -75,21 +112,8 @@ export default function AdicionarVacina({ route, navigation }) {
           onChangeText={setTecnico}
         />
       </View>
-      <TouchableOpacity
-        style={{
-          marginTop: 30,
-          backgroundColor: "#26A20A",
-          height: "7%",
-          justifyContent: "center",
-          width: "80%",
-          marginHorizontal: "10%",
-          borderRadius: 100,
-        }}
-        onPress={adicionarDose}
-      >
-        <Text style={{ textAlign: "center", fontSize: 25, color: "#FFF" }}>
-          Adicinar Dose
-        </Text>
+      <TouchableOpacity style={style.btnaddvacina} onPress={adicionarDose}>
+        <Text style={style.textbtn}>Adicinar Dose</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

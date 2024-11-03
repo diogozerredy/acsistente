@@ -134,6 +134,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
   },
+  dtlsviewbtn: { flexDirection: "row", marginTop: 15 },
   vieweditarinput: {
     borderColor: "#26A20A",
     borderWidth: 1,
@@ -196,7 +197,15 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   descvcn: { fontSize: 16 },
-
+  btnaddvacina: {
+    marginTop: 30,
+    backgroundColor: "#26A20A",
+    padding: 12,
+    justifyContent: "center",
+    width: "80%",
+    marginHorizontal: "10%",
+    borderRadius: 10,
+  },
   addInput: { borderBottomWidth: 0.5, height: 35 },
   // pesos
   title: { fontSize: 20, fontWeight: "bold", marginBottom: 20, marginLeft: 20 },

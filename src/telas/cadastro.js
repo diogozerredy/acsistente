@@ -156,20 +156,12 @@ export default function Cadastro({ navigation }) {
 
           <Text style={style.cadtexto}>{message}</Text>
         </View>
-        <View style={{ justifyContent: "flex-end", flex: 1 }}>
+        <View style={{ justifyContent: "flex-end", height: "28%" }}>
           <TouchableOpacity
             style={style.btnretangular}
             onPress={telaCadastrarCrianca}
           >
-            <Text
-              style={{
-                color: "#FFFFFF",
-                fontSize: 25,
-                textAlign: "center",
-              }}
-            >
-              Salvar
-            </Text>
+            <Text style={style.textbtn}>Salvar</Text>
           </TouchableOpacity>
         </View>
         <View style={style.viewbtn}>

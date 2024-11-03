@@ -169,11 +169,12 @@ export default function VerPesos({ route }) {
                         } Meses`
                     : peso.idade == 1
                     ? `${peso.idade} Mes`
-                    : `${peso.idade} Meses`}
+                    : `${peso.idade} Meses`}{" "}
+                  ({peso.idade} Meses)
                 </Text>
                 <Text style={style.pesoText}>Peso: {peso.peso} kg</Text>
               </View>
-              <View style={{ flexDirection: "row", gap: 40, marginRight: 20 }}>
+              <View style={{ flexDirection: "row", gap: 20, marginRight: 20 }}>
                 <TouchableOpacity onPress={() => abrirModalEditar(index)}>
                   <FontAwesome5 name="edit" size={28} color="#00008b" />
                 </TouchableOpacity>
@@ -211,19 +212,19 @@ export default function VerPesos({ route }) {
               keyboardType="numeric"
               value={data}
               onChangeText={telaData}
+              maxLength={10}
             />
-            {errors.data && <Text style={style.errorText}>{errors.data}</Text>}
+            {errors.data && <Text style={style.error}>{errors.data}</Text>}
 
             <TextInput
               style={style.input}
               placeholder="Idade (em meses)"
               keyboardType="numeric"
               value={idade}
+              maxLength={2}
               onChangeText={setIdade}
             />
-            {errors.idade && (
-              <Text style={style.errorText}>{errors.idade}</Text>
-            )}
+            {errors.idade && <Text style={style.error}>{errors.idade}</Text>}
 
             <TextInput
               style={style.input}
@@ -232,7 +233,7 @@ export default function VerPesos({ route }) {
               value={peso}
               onChangeText={setPeso}
             />
-            {errors.peso && <Text style={style.errorText}>{errors.peso}</Text>}
+            {errors.peso && <Text style={style.error}>{errors.peso}</Text>}
 
             <View style={style.pesoModal}>
               <TouchableOpacity
@@ -265,7 +266,7 @@ export default function VerPesos({ route }) {
               value={data}
               onChangeText={telaData}
             />
-            {errors.data && <Text style={style.errorText}>{errors.data}</Text>}
+            {errors.data && <Text style={style.error}>{errors.data}</Text>}
 
             <TextInput
               style={style.input}
@@ -274,9 +275,7 @@ export default function VerPesos({ route }) {
               value={idade}
               onChangeText={setIdade}
             />
-            {errors.idade && (
-              <Text style={style.errorText}>{errors.idade}</Text>
-            )}
+            {errors.idade && <Text style={style.error}>{errors.idade}</Text>}
 
             <TextInput
               style={style.input}
@@ -285,7 +284,7 @@ export default function VerPesos({ route }) {
               value={peso}
               onChangeText={setPeso}
             />
-            {errors.peso && <Text style={style.errorText}>{errors.peso}</Text>}
+            {errors.peso && <Text style={style.error}>{errors.peso}</Text>}
 
             <View style={style.pesoModal}>
               <TouchableOpacity

@@ -280,27 +280,29 @@ export default function TelaCrianca({ route, navigation }) {
                 </TouchableOpacity>
               </View>
             )}
-            <TouchableOpacity
-              style={style.btnretangular}
-              onPress={() => {
-                setEditarNome(false);
-                setEditarMae(false);
-                setEditarDn(false);
-                setMostrarEdita(false);
-                setbtnmostrar(true);
-                cancelarEdicao("nome");
-                cancelarEdicao("dn");
-                cancelarEdicao("mae");
-              }}
-            >
-              <Text style={style.textbtn}>cancelar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={style.btnretangular}
-              onPress={SalvarCrianca}
-            >
-              <Text style={style.textbtn}>Salvar</Text>
-            </TouchableOpacity>
+            <View style={style.dtlsviewbtn}>
+              <TouchableOpacity
+                style={[style.btnretangular, { flex: 1 }]}
+                onPress={() => {
+                  setEditarNome(false);
+                  setEditarMae(false);
+                  setEditarDn(false);
+                  setMostrarEdita(false);
+                  setbtnmostrar(true);
+                  cancelarEdicao("nome");
+                  cancelarEdicao("dn");
+                  cancelarEdicao("mae");
+                }}
+              >
+                <Text style={style.textbtn}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[style.btnretangular, { flex: 1 }]}
+                onPress={SalvarCrianca}
+              >
+                <Text style={style.textbtn}>Salvar</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         ) : (
           <View
