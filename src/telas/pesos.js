@@ -12,6 +12,16 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import style from "../../style/style";
 
+const exibirIdade = (idadeMeses) => {
+  const anos = Math.floor(idadeMeses / 12);
+  const meses = idadeMeses % 12;
+  return anos > 0
+    ? `${anos} Ano${anos > 1 ? "s" : ""} ${
+        meses > 0 ? `${meses} Mes${meses > 1 ? "es" : ""}` : ""
+      }`
+    : `${meses} Mes${meses > 1 ? "es" : ""}`;
+};
+
 export default function VerPesos({ route }) {
   const { crianca } = route.params;
   const [pesos, setPesos] = useState([]);
@@ -89,9 +99,24 @@ export default function VerPesos({ route }) {
     if (!idade) {
       novosErros.idade = "Campo Obrigatório*";
       validar = false;
+
+      if (
+        !idade ||
+        isNaN(idade) ||
+        parseInt(idade, 10) < 0 ||
+        parseInt(idade, 10) > 120
+      ) {
+        novosErros.idade = "Idade deve estar entre 0 e 120*";
+        validar = false;
+      }
+
+      if (!peso) {
+        novosErros.peso = "Campo Obrigatório*";
+        validar = false;
+      }
     }
-    if (!peso) {
-      novosErros.peso = "Campo Obrigatório*";
+    if (!peso || isNaN(peso) || parseFloat(peso) <= 0) {
+      novosErros.peso = "Insira um peso válido*";
       validar = false;
     }
 
@@ -103,7 +128,12 @@ export default function VerPesos({ route }) {
     if (!validarInput()) return;
 
     const novoPeso = { data, idade, peso: parseFloat(peso) };
-    const novosPesos = [...pesos, novoPeso];
+    const novosPesos = [...pesos, novoPeso].sort((a, b) => {
+      return (
+        new Date(a.data.split("/").reverse().join("-")) -
+        new Date(b.data.split("/").reverse().join("-"))
+      );
+    });
     setPesos(novosPesos);
     salvarPesos(novosPesos);
     setData("");
@@ -142,6 +172,7 @@ export default function VerPesos({ route }) {
     const novosPesos = pesos.filter((_, i) => i !== selecionaIndicePeso);
     setPesos(novosPesos);
     salvarPesos(novosPesos);
+    setSelecionaIndicePeso(null);
     setApagarmodal(false);
   };
 
@@ -156,21 +187,7 @@ export default function VerPesos({ route }) {
               <View>
                 <Text style={style.pesoText}>Data: {peso.data}</Text>
                 <Text style={style.pesoText}>
-                  Idade:{" "}
-                  {peso.idade >= 12
-                    ? peso.idade == 12
-                      ? `${peso.idade / 12} Ano`
-                      : peso.idade == 13
-                      ? `${(peso.idade - (peso.idade % 12)) / 12} Ano ${
-                          peso.idade % 12
-                        } Mes`
-                      : `${(peso.idade - (peso.idade % 12)) / 12} Ano ${
-                          peso.idade % 12
-                        } Meses`
-                    : peso.idade == 1
-                    ? `${peso.idade} Mes`
-                    : `${peso.idade} Meses`}{" "}
-                  ({peso.idade} Meses)
+                  Idade: {exibirIdade(peso.idade)} ({peso.idade} Meses)
                 </Text>
                 <Text style={style.pesoText}>Peso: {peso.peso} kg</Text>
               </View>

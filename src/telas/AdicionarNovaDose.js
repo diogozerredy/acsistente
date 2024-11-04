@@ -133,7 +133,7 @@ export default function AdicionarVacina({ route, navigation }) {
           </View>
         </View>
       </Modal>
-      <View style={{ justifyContent: "space-evenly", flex: 1 }}>
+      <View style={{ justifyContent: "space-between", flex: 1 }}>
         <View
           style={{
             borderWidth: 1,
@@ -180,19 +180,42 @@ export default function AdicionarVacina({ route, navigation }) {
           />
         </View>
         <View>
-          <TouchableOpacity style={style.btnaddvacina} onPress={salvarVacina}>
-            <Text style={style.textbtn}>
-              {isEditing ? "Salvar" : "Adicionar Vacina"}
-            </Text>
-          </TouchableOpacity>
           {isEditing && (
+            <View
+              style={{
+                marginTop: "5%",
+                flexDirection: "row",
+                paddingHorizontal: "10%",
+                gap: 15,
+              }}
+            >
+              <TouchableOpacity
+                style={style.btnadddose}
+                onPress={() => navigation.goBack()}
+              >
+                <Text style={style.textbtn}>Voltar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.btnadddose}
+                onPress={() => setModal(true)}
+              >
+                <Text style={style.textbtn}>Excluir</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          <View>
             <TouchableOpacity
               style={style.btnaddvacina}
-              onPress={() => setModal(true)}
+              onPress={() => navigation.goBack()}
             >
-              <Text style={style.textbtn}>Excluir Vacina</Text>
+              <Text style={style.textbtn}>Voltar</Text>
             </TouchableOpacity>
-          )}
+            <TouchableOpacity style={style.btnaddvacina} onPress={salvarVacina}>
+              <Text style={style.textbtn}>
+                {isEditing ? "Salvar" : "Adicionar Vacina"}
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={style.viewbtn}>
           <TouchableOpacity
