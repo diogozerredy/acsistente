@@ -109,17 +109,17 @@ export default function AdicionarVacina({ route, navigation }) {
         animationType="slide"
         transparent={true}
         visible={modal}
-        onRequestClose={() => modal(false)}
+        onRequestClose={() => setModal(false)}
       >
         <View style={style.centeredView}>
           <View style={style.modalView}>
             <Text style={style.modalText}>
-              Deseja realmente excluir este vacina?
+              Deseja realmente excluir esta vacina?
             </Text>
             <View style={style.btnview}>
               <TouchableOpacity
                 style={style.buttonPeso}
-                onPress={() => modal(false)}
+                onPress={() => setModal(false)}
               >
                 <Text style={style.textStyle}>Cancelar</Text>
               </TouchableOpacity>
@@ -133,7 +133,7 @@ export default function AdicionarVacina({ route, navigation }) {
           </View>
         </View>
       </Modal>
-      <View style={{ justifyContent: "space-between", flex: 1 }}>
+      <View style={{ justifyContent: "space-evenly", flex: 1 }}>
         <View
           style={{
             borderWidth: 1,

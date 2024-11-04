@@ -94,7 +94,6 @@ export default StyleSheet.create({
   // CADASTRO
   viewinput: {
     padding: 7,
-    height: "100%",
     justifyContent: "space-between",
     flex: 1,
   },
@@ -117,7 +116,7 @@ export default StyleSheet.create({
   viewbtn: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginVertical: 50,
+    marginVertical: "10%",
   },
   btnav: {
     justifyContent: "center",
@@ -132,9 +131,6 @@ export default StyleSheet.create({
   },
   //erros
   error: {
-    marginStart: 10,
-    marginBottom: 5,
-    marginTop: 3,
     color: "red",
   },
   //DetalhesCriancas
@@ -212,6 +208,13 @@ export default StyleSheet.create({
     justifyContent: "center",
     width: "80%",
     marginHorizontal: "10%",
+    borderRadius: 10,
+  },
+  btnadddose: {
+    flexGrow: 1,
+    backgroundColor: "#26A20A",
+    padding: 12,
+    justifyContent: "center",
     borderRadius: 10,
   },
   addInput: { borderBottomWidth: 0.5, height: 35 },

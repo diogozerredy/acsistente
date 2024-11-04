@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text } from "react-native";
+import { View, TextInput, Text, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import style from "../../style/style";
 import { TouchableOpacity } from "react-native";
@@ -17,6 +17,7 @@ export default function AdicionarDose({ route, navigation }) {
   const [lote, setLote] = useState(vacina.lote || "");
   const [tecnico, setTecnico] = useState(vacina.tecnico || "");
   const [errors, setErrors] = useState({});
+  const [modal, setModal] = useState(false);
 
   // Função para formatar a data
   const telaData = (value) => {
@@ -101,6 +102,34 @@ export default function AdicionarDose({ route, navigation }) {
 
   return (
     <SafeAreaView style={style.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => setModal(false)}
+      >
+        <View style={style.centeredView}>
+          <View style={style.modalView}>
+            <Text style={style.modalText}>
+              Deseja realmente remover esta vacina?
+            </Text>
+            <View style={style.btnview}>
+              <TouchableOpacity
+                style={style.buttonPeso}
+                onPress={() => setModal(false)}
+              >
+                <Text style={style.textStyle}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.buttonPeso}
+                onPress={limparCamposEVacina}
+              >
+                <Text style={style.textStyle}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
           justifyContent: "space-between",
@@ -147,12 +176,27 @@ export default function AdicionarDose({ route, navigation }) {
           />
         </View>
         <View>
-          <TouchableOpacity
-            style={style.btnaddvacina}
-            onPress={limparCamposEVacina}
+          <View
+            style={{
+              marginTop: "5%",
+              flexDirection: "row",
+              paddingHorizontal: "10%",
+              gap: 15,
+            }}
           >
-            <Text style={style.textbtn}>Remover</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={style.btnadddose}
+              onPress={() => navigation.goBack()}
+            >
+              <Text style={style.textbtn}>Cancelar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={style.btnadddose}
+              onPress={() => setModal(true)}
+            >
+              <Text style={style.textbtn}>Remover</Text>
+            </TouchableOpacity>
+          </View>
           <TouchableOpacity style={style.btnaddvacina} onPress={adicionarDose}>
             <Text style={style.textbtn}>Adicionar Dose</Text>
           </TouchableOpacity>
