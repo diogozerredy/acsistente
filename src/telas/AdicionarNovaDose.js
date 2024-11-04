@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Alert } from "react-native";
+import { View, TextInput, Text, Modal } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import style from "../../style/style";
 import { TouchableOpacity } from "react-native";
@@ -15,6 +15,7 @@ export default function AdicionarVacina({ route, navigation }) {
   const [lote, setLote] = useState(vacina?.lote || "");
   const [tecnico, setTecnico] = useState(vacina?.tecnico || "");
   const [errors, setErrors] = useState({});
+  const [modal, setModal] = useState(false);
 
   const telaData = (value) => {
     const formatoData = value
@@ -95,31 +96,43 @@ export default function AdicionarVacina({ route, navigation }) {
   };
 
   const excluirVacina = () => {
-    Alert.alert(
-      "Excluir Vacina",
-      "Tem certeza de que deseja excluir esta vacina?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: () => {
-            navigation.navigate({
-              name: "VerVacina",
-              params: { vacinaExcluida: vacina },
-              merge: true,
-            });
-          },
-        },
-      ]
-    );
+    navigation.navigate({
+      name: "VerVacina",
+      params: { vacinaExcluida: vacina },
+      merge: true,
+    });
   };
 
   return (
     <SafeAreaView style={style.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => modal(false)}
+      >
+        <View style={style.centeredView}>
+          <View style={style.modalView}>
+            <Text style={style.modalText}>
+              Deseja realmente excluir este vacina?
+            </Text>
+            <View style={style.btnview}>
+              <TouchableOpacity
+                style={style.buttonPeso}
+                onPress={() => modal(false)}
+              >
+                <Text style={style.textStyle}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={style.buttonPeso}
+                onPress={excluirVacina}
+              >
+                <Text style={style.textStyle}>Confirmar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View style={{ justifyContent: "space-between", flex: 1 }}>
         <View
           style={{
@@ -175,7 +188,7 @@ export default function AdicionarVacina({ route, navigation }) {
           {isEditing && (
             <TouchableOpacity
               style={style.btnaddvacina}
-              onPress={excluirVacina}
+              onPress={() => setModal(true)}
             >
               <Text style={style.textbtn}>Excluir Vacina</Text>
             </TouchableOpacity>

@@ -12,6 +12,7 @@ export default StyleSheet.create({
   textStyle: { color: "#FFFFFF", textAlign: "center", fontSize: 16 },
   container: {
     flex: 1,
+    paddingVertical: 10,
   },
 
   content: {
