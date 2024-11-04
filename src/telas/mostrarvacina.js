@@ -5,7 +5,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import style from "../../style/style";
 
 export default function VerVacinas({ route, navigation }) {
-  const { crianca, novaVacina, doseAtualizada } = route.params || {};
+  const { crianca, novaVacina, doseAtualizada, vacinaExcluida } =
+    route.params || {};
   const [vacinas, setVacinas] = useState([]);
   const [outrasVacinas, setOutrasVacinas] = useState(null);
 
@@ -16,22 +17,17 @@ export default function VerVacinas({ route, navigation }) {
           `vacinas_${crianca.id}`
         );
         if (vacinasSalvas) {
-          console.log("Vacinas carregadas do AsyncStorage:", vacinasSalvas);
           setVacinas(JSON.parse(vacinasSalvas));
         } else {
-          console.log(
-            "Nenhuma vacina encontrada no AsyncStorage. Usando vacinas padrão."
-          );
-          setVacinas(crianca.vacinas);
+          setVacinas(crianca.vacinas || []);
         }
       } catch (error) {
         console.error("Erro ao carregar vacinas:", error);
       }
     };
     carregarVacinas();
-  }, []);
+  }, [crianca.id]);
 
-  // Atualizar e salvar novas vacinas
   useEffect(() => {
     if (novaVacina) {
       setVacinas((prevVacinas) => {
@@ -42,12 +38,13 @@ export default function VerVacinas({ route, navigation }) {
     }
   }, [novaVacina]);
 
-  // Atualizar e salvar dose editada
   useEffect(() => {
     if (doseAtualizada) {
       setVacinas((prevVacinas) => {
         const vacinasAtualizadas = prevVacinas.map((vacina) =>
-          vacina.id === doseAtualizada.id ? doseAtualizada : vacina
+          vacina.id === doseAtualizada.id
+            ? { ...vacina, ...doseAtualizada }
+            : vacina
         );
         salvarVacinasAsync(vacinasAtualizadas);
         return vacinasAtualizadas;
@@ -55,13 +52,24 @@ export default function VerVacinas({ route, navigation }) {
     }
   }, [doseAtualizada]);
 
+  useEffect(() => {
+    if (vacinaExcluida) {
+      setVacinas((prevVacinas) => {
+        const vacinasAtualizadas = prevVacinas.filter(
+          (vacina) => vacina.id !== vacinaExcluida.id
+        );
+        salvarVacinasAsync(vacinasAtualizadas);
+        return vacinasAtualizadas;
+      });
+    }
+  }, [vacinaExcluida]);
+
   const salvarVacinasAsync = async (vacinasParaSalvar) => {
     try {
       await AsyncStorage.setItem(
         `vacinas_${crianca.id}`,
         JSON.stringify(vacinasParaSalvar)
       );
-      console.log("Vacinas salvas no AsyncStorage:", vacinasParaSalvar);
     } catch (error) {
       console.error("Erro ao salvar vacinas no AsyncStorage:", error);
     }
@@ -81,7 +89,7 @@ export default function VerVacinas({ route, navigation }) {
   const agruparVacinasPorIdadeEDose = (vacinas) => {
     const grupos = {};
     vacinas.forEach((vacina) => {
-      if (vacina.id !== "outras_Vacinas") {
+      if (vacina.id !== "outras_Vacinas" && vacina.idade !== null) {
         const chave = `${vacina.idade} - ${vacina.dose}`;
         if (!grupos[chave]) {
           grupos[chave] = [];
@@ -91,6 +99,8 @@ export default function VerVacinas({ route, navigation }) {
     });
     return grupos;
   };
+
+  const vacinasSemIdade = vacinas.filter((vacina) => vacina.idade === null);
 
   const formatarIdade = (idade) => {
     if (idade === "Ao Nascer") return "Ao Nascer";
@@ -107,13 +117,14 @@ export default function VerVacinas({ route, navigation }) {
 
   const gruposVacinas = agruparVacinasPorIdadeEDose(vacinas);
 
-  const handleEditVacina = (vacina) => {
+  const EditVacina = (vacina) => {
     navigation.navigate("OutrasVacinas", {
       criancaId: crianca.id,
       vacina,
       isEditing: true,
     });
   };
+
   return (
     <SafeAreaView style={[style.container, { paddingBottom: 30 }]}>
       <ScrollView>
@@ -211,35 +222,36 @@ export default function VerVacinas({ route, navigation }) {
         ) : (
           <Text>Vacina 'Outras Vacinas' não encontrada.</Text>
         )}
-        {novaVacina && (
+
+        {vacinasSemIdade.length > 0 && (
           <View>
-            <Text style={style.idadevcn}>Nova Vacina Adicionada</Text>
-            <TouchableOpacity
-              style={style.tabvcn}
-              onPress={() => handleEditVacina(novaVacina)}
-            >
-              <View style={{ borderWidth: 1, gap: 5, padding: 5 }}>
-                <Text style={style.titlevcn}>{novaVacina.nome}</Text>
-                <Text style={style.descvcn}>
-                  Data:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{novaVacina.data}</Text>
-                </Text>
-                <Text style={style.descvcn}>
-                  Local:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{novaVacina.local}</Text>
-                </Text>
-                <Text style={style.descvcn}>
-                  Lote:{" "}
-                  <Text style={{ fontWeight: "bold" }}>{novaVacina.lote}</Text>
-                </Text>
-                <Text style={style.descvcn}>
-                  Técnico:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {novaVacina.tecnico}
+            {vacinasSemIdade.map((vacina, index) => (
+              <TouchableOpacity
+                key={index}
+                style={style.tabvcn}
+                onPress={() => EditVacina(vacina)}
+              >
+                <View style={{ borderWidth: 1, gap: 5, padding: 5 }}>
+                  <Text style={style.titlevcn}>{vacina.nome}</Text>
+                  <Text style={style.descvcn}>
+                    Data:{" "}
+                    <Text style={{ fontWeight: "bold" }}>{vacina.data}</Text>
                   </Text>
-                </Text>
-              </View>
-            </TouchableOpacity>
+                  <Text style={style.descvcn}>
+                    Local:{" "}
+                    <Text style={{ fontWeight: "bold" }}>{vacina.local}</Text>
+                  </Text>
+                  <Text style={style.descvcn}>
+                    Lote:{" "}
+                    <Text style={{ fontWeight: "bold" }}>{vacina.lote}</Text>
+                  </Text>
+                  <Text style={style.descvcn}>
+                    Técnico:{" "}
+                    <Text style={{ fontWeight: "bold" }}>{vacina.tecnico}</Text>
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
         )}
       </ScrollView>

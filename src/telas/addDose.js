@@ -1,21 +1,24 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, Alert } from "react-native";
+import { View, TextInput, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import style from "../../style/style";
 import { TouchableOpacity } from "react-native";
-import Vacina from "../objetos/vacina";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
-export default function AdicionarVacina({ route, navigation }) {
-  const { vacina, isEditing } = route.params || {};
+export default function AdicionarDose({ route, navigation }) {
+  const { vacina } = route.params || {};
 
-  const [nome, setNome] = useState(vacina?.nome || "");
-  const [data, setData] = useState(vacina?.data || "");
-  const [local, setLocal] = useState(vacina?.local || "");
-  const [lote, setLote] = useState(vacina?.lote || "");
-  const [tecnico, setTecnico] = useState(vacina?.tecnico || "");
+  if (!vacina) {
+    return <Text>Erro: Dados da vacina não foram encontrados.</Text>;
+  }
+
+  const [data, setData] = useState(vacina.data || "");
+  const [local, setLocal] = useState(vacina.local || "");
+  const [lote, setLote] = useState(vacina.lote || "");
+  const [tecnico, setTecnico] = useState(vacina.tecnico || "");
   const [errors, setErrors] = useState({});
 
+  // Função para formatar a data
   const telaData = (value) => {
     const formatoData = value
       .replace(/\D/g, "")
@@ -24,14 +27,11 @@ export default function AdicionarVacina({ route, navigation }) {
     setData(formatoData);
   };
 
+  // Função para validar a entrada de dados
   const validarInput = () => {
     let validar = true;
     let novosErros = {};
 
-    if (!nome) {
-      novosErros.nome = "Campo Obrigatório*";
-      validar = false;
-    }
     if (!data) {
       novosErros.data = "Campo Obrigatório*";
       validar = false;
@@ -54,6 +54,7 @@ export default function AdicionarVacina({ route, navigation }) {
         validar = false;
       }
     }
+
     if (!local) {
       novosErros.local = "Campo Obrigatório*";
       validar = false;
@@ -67,60 +68,45 @@ export default function AdicionarVacina({ route, navigation }) {
     return validar;
   };
 
-  const salvarVacina = () => {
-    if (!validarInput()) return;
+  const limparCamposEVacina = () => {
+    setData("");
+    setLocal("");
+    setLote("");
+    setTecnico("");
 
-    const dose = vacina?.dose || "UmaDose";
-    const idade = vacina?.idade || null;
-    const id = vacina?.id || `${nome}_${dose}`;
-
-    const vacinaAtualizada = new Vacina(
-      nome,
-      dose,
-      idade,
-      id,
-      data,
-      local,
-      lote,
-      tecnico
-    );
-
+    const vacinaAtualizada = {
+      ...vacina,
+      data: "",
+      local: "",
+      lote: "",
+      tecnico: "",
+    };
     navigation.navigate({
       name: "VerVacina",
-      params: isEditing
-        ? { doseAtualizada: vacinaAtualizada }
-        : { novaVacina: vacinaAtualizada },
+      params: { doseAtualizada: vacinaAtualizada },
       merge: true,
     });
   };
 
-  const excluirVacina = () => {
-    Alert.alert(
-      "Excluir Vacina",
-      "Tem certeza de que deseja excluir esta vacina?",
-      [
-        {
-          text: "Cancelar",
-          style: "cancel",
-        },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: () => {
-            navigation.navigate({
-              name: "VerVacina",
-              params: { vacinaExcluida: vacina },
-              merge: true,
-            });
-          },
-        },
-      ]
-    );
+  // Função para adicionar ou atualizar a dose
+  const adicionarDose = () => {
+    if (!validarInput()) return;
+    const vacinaAtualizada = { ...vacina, data, local, lote, tecnico };
+    navigation.navigate({
+      name: "VerVacina",
+      params: { doseAtualizada: vacinaAtualizada },
+      merge: true,
+    });
   };
 
   return (
     <SafeAreaView style={style.container}>
-      <View style={{ justifyContent: "space-between", flex: 1 }}>
+      <View
+        style={{
+          justifyContent: "space-between",
+          flex: 1,
+        }}
+      >
         <View
           style={{
             borderWidth: 1,
@@ -129,13 +115,7 @@ export default function AdicionarVacina({ route, navigation }) {
             marginHorizontal: 15,
           }}
         >
-          <TextInput
-            style={style.addInput}
-            placeholder="Nome da Vacina:"
-            value={nome}
-            onChangeText={setNome}
-          />
-          {errors.nome && <Text style={style.error}>{errors.nome}</Text>}
+          <Text style={style.titlevcn}>{vacina.nome}</Text>
           <TextInput
             style={style.addInput}
             placeholder="Data:"
@@ -167,19 +147,15 @@ export default function AdicionarVacina({ route, navigation }) {
           />
         </View>
         <View>
-          <TouchableOpacity style={style.btnaddvacina} onPress={salvarVacina}>
-            <Text style={style.textbtn}>
-              {isEditing ? "Salvar" : "Adicionar Vacina"}
-            </Text>
+          <TouchableOpacity
+            style={style.btnaddvacina}
+            onPress={limparCamposEVacina}
+          >
+            <Text style={style.textbtn}>Remover</Text>
           </TouchableOpacity>
-          {isEditing && (
-            <TouchableOpacity
-              style={style.btnaddvacina}
-              onPress={excluirVacina}
-            >
-              <Text style={style.textbtn}>Excluir Vacina</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity style={style.btnaddvacina} onPress={adicionarDose}>
+            <Text style={style.textbtn}>Adicionar Dose</Text>
+          </TouchableOpacity>
         </View>
         <View style={style.viewbtn}>
           <TouchableOpacity
@@ -191,7 +167,6 @@ export default function AdicionarVacina({ route, navigation }) {
             <FontAwesome5 name="home" size={40} color="#FFFFFF" />
             <Text style={style.dtlhsText}>Inicio</Text>
           </TouchableOpacity>
-
           <TouchableOpacity
             style={style.btndetalhes}
             onPress={() =>

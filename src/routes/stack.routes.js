@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import VerVacinas from "../telas/mostrarvacina.js";
-import AdicionarVacina from "../telas/addvacina.js";
 import Cadastro from "../telas/cadastro.js";
 import TabRoutes from "./tab.routes.js";
 import DetalhesCrianca from "../telas/detalhesCrianca.js";
 import AdicionarPeso from "../telas/pesos.js";
 import Sobre from "../telas/Sobre.js";
 import AdicionarNovaVacina from "../telas/AdicionarNovaDose.js";
+import AdicionarDose from "../telas/addDose.js";
 const Stack = createNativeStackNavigator();
 
 export default function StackRoutes() {
@@ -33,7 +33,7 @@ export default function StackRoutes() {
         component={VerVacinas}
       />
       <Stack.Screen name="Detalhes" component={DetalhesCrianca} />
-      <Stack.Screen name="AdicionarDose" component={AdicionarVacina} />
+      <Stack.Screen name="AdicionarDose" component={AdicionarDose} />
       <Stack.Screen name="OutrasVacinas" component={AdicionarNovaVacina} />
       <Stack.Screen
         options={{ title: "Pesos" }}

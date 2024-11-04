@@ -43,7 +43,7 @@ export default function Cadastro({ navigation }) {
     new Vacina("VOP", "2°Reforço", 48, "VOP_2Reforco"),
     new Vacina("Febre Amarela", "Dose1", 48, "FebreAmarela_Dose1_48"),
     new Vacina("Varicela", "UmaDose", 48, "Varicela_UmaDose"),
-    new Vacina("Outras Vacinas", "UmaDose", "" || null, "outras_Vacinas"),
+    new Vacina("Outras Vacinas", "UmaDose", 99, "outras_Vacinas"),
   ]);
 
   const telaCadastrarCrianca = async () => {
