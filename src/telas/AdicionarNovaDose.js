@@ -204,12 +204,12 @@ export default function AdicionarVacina({ route, navigation }) {
             </View>
           )}
           <View>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={style.btnaddvacina}
               onPress={() => navigation.goBack()}
             >
               <Text style={style.textbtn}>Voltar</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity style={style.btnaddvacina} onPress={salvarVacina}>
               <Text style={style.textbtn}>
                 {isEditing ? "Salvar" : "Adicionar Vacina"}

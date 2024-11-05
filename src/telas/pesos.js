@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import style from "../../style/style";
-
+import { CriancaContext } from "../routes/CriancaContext.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const exibirIdade = (idadeMeses) => {
   const anos = Math.floor(idadeMeses / 12);
   const meses = idadeMeses % 12;
@@ -23,8 +23,11 @@ const exibirIdade = (idadeMeses) => {
 };
 
 export default function VerPesos({ route }) {
+  const { id } = route.params;
+  const { adicionarPeso, atualizarPeso, excluirPeso } =
+    useContext(CriancaContext);
   const { crianca } = route.params;
-  const [pesos, setPesos] = useState([]);
+  const [pesos, setPesos] = useState(crianca.pesos || []);
   const [modal, setModal] = useState(false);
   const [editmodal, setEditmodal] = useState(false);
   const [apagarmodal, setApagarmodal] = useState(false);
@@ -41,7 +44,7 @@ export default function VerPesos({ route }) {
         if (pesosSalvos) {
           setPesos(JSON.parse(pesosSalvos));
         } else {
-          setPesos(crianca.pesos || []);
+          setPesos([]); // Inicializa como um array vazio se não houver dados
         }
       } catch (error) {
         console.error("Erro ao carregar pesos:", error);
@@ -49,17 +52,6 @@ export default function VerPesos({ route }) {
     };
     carregarPesos();
   }, [crianca.id]);
-
-  const salvarPesos = async (novosPesos) => {
-    try {
-      await AsyncStorage.setItem(
-        `pesos_${crianca.id}`,
-        JSON.stringify(novosPesos)
-      );
-    } catch (error) {
-      console.error("Erro ao salvar pesos:", error);
-    }
-  };
 
   const telaData = (value) => {
     const formatoData = value
@@ -96,25 +88,16 @@ export default function VerPesos({ route }) {
       }
     }
 
-    if (!idade) {
-      novosErros.idade = "Campo Obrigatório*";
+    if (
+      !idade ||
+      isNaN(idade) ||
+      parseInt(idade, 10) < 0 ||
+      parseInt(idade, 10) > 120
+    ) {
+      novosErros.idade = "Idade deve estar entre 0 e 120*";
       validar = false;
-
-      if (
-        !idade ||
-        isNaN(idade) ||
-        parseInt(idade, 10) < 0 ||
-        parseInt(idade, 10) > 120
-      ) {
-        novosErros.idade = "Idade deve estar entre 0 e 120*";
-        validar = false;
-      }
-
-      if (!peso) {
-        novosErros.peso = "Campo Obrigatório*";
-        validar = false;
-      }
     }
+
     if (!peso || isNaN(peso) || parseFloat(peso) <= 0) {
       novosErros.peso = "Insira um peso válido*";
       validar = false;
@@ -124,22 +107,47 @@ export default function VerPesos({ route }) {
     return validar;
   };
 
-  const adicionarPeso = () => {
+  const addPeso = async () => {
     if (!validarInput()) return;
 
-    const novoPeso = { data, idade, peso: parseFloat(peso) };
-    const novosPesos = [...pesos, novoPeso].sort((a, b) => {
-      return (
+    const novoPeso = { data, idade: parseInt(idade), peso: parseFloat(peso) };
+    await adicionarPeso(crianca.id, novoPeso); // Certifique-se de que 'id' é 'crianca.id'
+
+    const novosPesos = [...pesos, novoPeso].sort(
+      (a, b) =>
         new Date(a.data.split("/").reverse().join("-")) -
         new Date(b.data.split("/").reverse().join("-"))
-      );
-    });
+    );
+
     setPesos(novosPesos);
-    salvarPesos(novosPesos);
+    await AsyncStorage.setItem(
+      `pesos_${crianca.id}`,
+      JSON.stringify(novosPesos)
+    );
     setData("");
     setIdade("");
     setPeso("");
     setModal(false);
+  };
+
+  const editarPeso = async () => {
+    if (!validarInput()) return;
+
+    const novoPeso = { data, idade: parseInt(idade), peso: parseFloat(peso) };
+
+    await atualizarPeso(crianca.id, selecionaIndicePeso, novoPeso); // Certifique-se de que 'id' é 'crianca.id'
+
+    setPesos((prevPesos) => {
+      const novosPesos = [...prevPesos];
+      novosPesos[selecionaIndicePeso] = novoPeso;
+      return novosPesos;
+    });
+
+    await AsyncStorage.setItem(`pesos_${crianca.id}`, JSON.stringify(pesos)); // Atualize o AsyncStorage com a nova lista de pesos
+    setEditmodal(false);
+    setData("");
+    setIdade("");
+    setPeso("");
   };
 
   const abrirModalEditar = (index) => {
@@ -150,28 +158,17 @@ export default function VerPesos({ route }) {
     setEditmodal(true);
   };
 
-  const editarPeso = () => {
-    if (!validarInput()) return;
-
-    const novosPesos = [...pesos];
-    novosPesos[selecionaIndicePeso] = { data, idade, peso: parseFloat(peso) };
-    setPesos(novosPesos);
-    salvarPesos(novosPesos);
-    setEditmodal(false);
-    setData("");
-    setIdade("");
-    setPeso("");
-  };
-
   const confirmarExcluirPeso = (index) => {
     setSelecionaIndicePeso(index);
     setApagarmodal(true);
   };
 
-  const apagarPeso = () => {
-    const novosPesos = pesos.filter((_, i) => i !== selecionaIndicePeso);
-    setPesos(novosPesos);
-    salvarPesos(novosPesos);
+  const apagarPeso = async () => {
+    await excluirPeso(crianca.id, selecionaIndicePeso);
+    setPesos((prevPesos) =>
+      prevPesos.filter((_, i) => i !== selecionaIndicePeso)
+    );
+    await AsyncStorage.setItem(`pesos_${crianca.id}`, JSON.stringify(pesos)); // Atualize o AsyncStorage
     setSelecionaIndicePeso(null);
     setApagarmodal(false);
   };
@@ -259,10 +256,7 @@ export default function VerPesos({ route }) {
               >
                 <Text style={style.textStyle}>Cancelar</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={style.buttonPeso}
-                onPress={adicionarPeso}
-              >
+              <TouchableOpacity style={style.buttonPeso} onPress={addPeso}>
                 <Text style={style.textStyle}>Salvar</Text>
               </TouchableOpacity>
             </View>

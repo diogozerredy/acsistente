@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import {
   View,
   TextInput,
@@ -28,6 +28,10 @@ export default function TelaCrianca({ route, navigation }) {
   const [editarNome, setEditarNome] = useState(false);
   const [editarMae, setEditarMae] = useState(false);
   const [editarDn, setEditarDn] = useState(false);
+
+  const nomeInputRef = useRef(null);
+  const maeInputRef = useRef(null);
+  const dnInputRef = useRef(null);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [mostrarEditar, setMostrarEdita] = useState(false);
@@ -168,6 +172,7 @@ export default function TelaCrianca({ route, navigation }) {
               <View>
                 <View style={style.vieweditarinput}>
                   <TextInput
+                    ref={nomeInputRef}
                     style={style.editarinput}
                     placeholder="Nome da Criança"
                     value={nomeCrianca}
@@ -196,6 +201,10 @@ export default function TelaCrianca({ route, navigation }) {
                     setEditarDn(false);
 
                     setEditarMae(false);
+
+                    setTimeout(() => {
+                      nomeInputRef.current.focus();
+                    }, 0);
                   }}
                 >
                   <FontAwesome5 name="edit" size={24} color="#00008b" />
@@ -206,6 +215,7 @@ export default function TelaCrianca({ route, navigation }) {
               <View>
                 <View style={style.vieweditarinput}>
                   <TextInput
+                    ref={maeInputRef}
                     style={style.editarinput}
                     placeholder="Nome da Mãe"
                     value={nomeMae}
@@ -235,6 +245,9 @@ export default function TelaCrianca({ route, navigation }) {
                     setEditarNome(false);
 
                     setEditarDn(false);
+                    setTimeout(() => {
+                      maeInputRef.current.focus();
+                    }, 0);
                   }}
                 >
                   <FontAwesome5 name="edit" size={24} color="#00008b" />
@@ -245,6 +258,7 @@ export default function TelaCrianca({ route, navigation }) {
               <View>
                 <View style={style.vieweditarinput}>
                   <TextInput
+                    ref={dnInputRef}
                     style={style.editarinput}
                     maxLength={10}
                     placeholder="Data de Nascimento"
@@ -274,6 +288,9 @@ export default function TelaCrianca({ route, navigation }) {
                     setEditarDn(true);
                     setEditarNome(false);
                     setEditarMae(false);
+                    setTimeout(() => {
+                      dnInputRef.current.focus();
+                    }, 0);
                   }}
                 >
                   <FontAwesome5 name="edit" size={24} color="#00008b" />
@@ -343,7 +360,7 @@ export default function TelaCrianca({ route, navigation }) {
               }
               style={style.btnretangular}
             >
-              <Text style={style.textbtn}>Adicionar Peso</Text>
+              <Text style={style.textbtn}>Ver Peso</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={style.btnretangular}
