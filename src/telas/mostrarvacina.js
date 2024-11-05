@@ -212,9 +212,7 @@ export default function VerVacinas({ route, navigation }) {
                 </Text>
                 <Text style={style.descvcn}>
                   Técnico:{" "}
-                  <Text style={{ fontWeight: "bold" }}>
-                    {outrasVacinas.tecnico}
-                  </Text>
+                  <Text style={{ fontWeight: "bold" }}>{outrasVacinas.id}</Text>
                 </Text>
               </View>
             </TouchableOpacity>

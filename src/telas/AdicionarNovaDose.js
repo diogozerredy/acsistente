@@ -71,9 +71,10 @@ export default function AdicionarVacina({ route, navigation }) {
   const salvarVacina = () => {
     if (!validarInput()) return;
 
-    const dose = vacina?.dose || "UmaDose";
+    const dataid = data || "";
+    const dose = vacina?.dose || "umaDose";
     const idade = vacina?.idade || null;
-    const id = vacina?.id || `${nome}_${dose}`;
+    const id = vacina?.id || `${nome}_${dataid}`;
 
     const vacinaAtualizada = new Vacina(
       nome,
@@ -146,7 +147,7 @@ export default function AdicionarVacina({ route, navigation }) {
             style={style.addInput}
             placeholder="Nome da Vacina:"
             value={nome}
-            onChangeText={setNome}
+            onChangeText={(Nome) => setNome(Nome.toUpperCase())}
           />
           {errors.nome && <Text style={style.error}>{errors.nome}</Text>}
           <TextInput
@@ -162,7 +163,7 @@ export default function AdicionarVacina({ route, navigation }) {
             style={style.addInput}
             placeholder="Local:"
             value={local}
-            onChangeText={setLocal}
+            onChangeText={(local) => setLocal(local.toUpperCase())}
           />
           {errors.local && <Text style={style.error}>{errors.local}</Text>}
           <TextInput
@@ -176,7 +177,7 @@ export default function AdicionarVacina({ route, navigation }) {
             style={style.addInput}
             placeholder="Técnico:"
             value={tecnico}
-            onChangeText={setTecnico}
+            onChangeText={(tecnico) => setTecnico(tecnico.toUpperCase())}
           />
         </View>
         <View>
